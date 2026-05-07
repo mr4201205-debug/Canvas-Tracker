@@ -18,4 +18,14 @@ class CanvasTrackerApplicationTests {
 		assertEquals("abc123", user.getCanvasToken());
 	}
 
+	void saveUserShouldReturnUserWithName(){
+		User user = new User();
+		user.setName("Mushfiqur");
+		user.setEmail("mushfiqur@email.com");
+		user.setCanvasToken("testtoken123");
+
+		assertEquals("Mushfiqur", user.getName());
+		assertNotNull(user.getName());
+	}
+
 }
