@@ -1,5 +1,6 @@
 package com.canvastracker.canvas_tracker;
 
+import java.time.LocalDateTime;
 import com.canvastracker.canvas_tracker.model.Assignment;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,6 +44,18 @@ class CanvasTrackerApplicationTests {
 		assertEquals(100.0, assignment.getPoints());
 		assertEquals(25.0, assignment.getGradeWeight());
 		assertFalse(assignment.isSubmitted());
+	}
+
+	@Test
+	void assignmentDueDateShouldBeInFuture() {
+		Assignment assignment = new Assignment();
+		assignment.setTitle("Research Paper");
+		assignment.setCourseName("English 101");
+		assignment.setDueDate(LocalDateTime.now().plusDays(7));
+		assignment.setPoints(100.0);
+		assignment.setSubmitted(false);
+
+		assertTrue(assignment.getDueDate().isAfter(LocalDateTime.now()));
 	}
 
 }

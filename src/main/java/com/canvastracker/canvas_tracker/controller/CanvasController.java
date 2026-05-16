@@ -1,6 +1,7 @@
 package com.canvastracker.canvas_tracker.controller;
 
 import com.canvastracker.canvas_tracker.service.CanvasApiService;
+import com.canvastracker.canvas_tracker.service.CanvasSyncService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -8,9 +9,12 @@ import org.springframework.web.bind.annotation.*;
 public class CanvasController {
 
     private final CanvasApiService canvasApiService;
+    private final CanvasSyncService canvasSyncService;
 
-    public CanvasController(CanvasApiService canvasApiService) {
+
+    public CanvasController(CanvasApiService canvasApiService, CanvasSyncService canvasSyncService) {
         this.canvasApiService = canvasApiService;
+        this.canvasSyncService = canvasSyncService;
     }
 
     @GetMapping("/courses")
@@ -21,5 +25,12 @@ public class CanvasController {
     @GetMapping("/courses/{courseId}/assignments")
     public String getAssignments(@PathVariable String courseId) {
         return canvasApiService.getAssignments(courseId);
+    }
+
+
+    @GetMapping("/sync")
+    public String syncAssignments() {
+        canvasSyncService.syncAssignments();
+        return "Sync completed successfully";
     }
 }
