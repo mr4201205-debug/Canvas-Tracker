@@ -1,5 +1,6 @@
 package com.canvastracker.canvas_tracker.controller;
 
+import com.canvastracker.canvas_tracker.service.NotificationService;
 import com.canvastracker.canvas_tracker.service.CanvasApiService;
 import com.canvastracker.canvas_tracker.service.CanvasSyncService;
 import org.springframework.web.bind.annotation.*;
@@ -10,11 +11,13 @@ public class CanvasController {
 
     private final CanvasApiService canvasApiService;
     private final CanvasSyncService canvasSyncService;
+    private final NotificationService notificationService;
 
 
-    public CanvasController(CanvasApiService canvasApiService, CanvasSyncService canvasSyncService) {
+    public CanvasController(CanvasApiService canvasApiService, CanvasSyncService canvasSyncService, NotificationService notificationService) {
         this.canvasApiService = canvasApiService;
         this.canvasSyncService = canvasSyncService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/courses")
@@ -32,5 +35,11 @@ public class CanvasController {
     public String syncAssignments() {
         canvasSyncService.syncAssignments();
         return "Sync completed successfully";
+    }
+
+    @GetMapping("/notify")
+    public String checkNotifications() {
+        notificationService.checkAndNotify();
+        return "Notification check completed";
     }
 }

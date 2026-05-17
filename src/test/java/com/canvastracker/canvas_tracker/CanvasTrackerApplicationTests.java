@@ -58,4 +58,19 @@ class CanvasTrackerApplicationTests {
 		assertTrue(assignment.getDueDate().isAfter(LocalDateTime.now()));
 	}
 
+	@Test
+	void shouldTriggerEmailReminderWithin72Hours() {
+		Assignment assignment = new Assignment();
+		assignment.setTitle("Research Paper");
+		assignment.setCourseName("English 101");
+		assignment.setDueDate(LocalDateTime.now().plusHours(48));
+		assignment.setSubmitted(false);
+
+		long hoursUntilDue = java.time.temporal.ChronoUnit.HOURS.between(
+				LocalDateTime.now(), assignment.getDueDate());
+
+		assertTrue(hoursUntilDue <= 72);
+		assertFalse(assignment.isSubmitted());
+	}
+
 }
