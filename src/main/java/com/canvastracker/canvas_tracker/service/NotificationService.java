@@ -2,6 +2,8 @@ package com.canvastracker.canvas_tracker.service;
 
 import com.canvastracker.canvas_tracker.model.Assignment;
 import com.canvastracker.canvas_tracker.repository.AssignmentRepository;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,11 +15,16 @@ public class NotificationService {
 
     private final AssignmentRepository assignmentRepository;
     private final CanvasApiService canvasApiService;
+    private final JavaMailSender mailSender;
+    private static final org.slf4j.Logger logger =
+            org.slf4j.LoggerFactory.getLogger(NotificationService.class);
 
     public NotificationService(AssignmentRepository assignmentRepository,
-                               CanvasApiService canvasApiService) {
+                               CanvasApiService canvasApiService,
+                               JavaMailSender mailSender) {
         this.assignmentRepository = assignmentRepository;
         this.canvasApiService = canvasApiService;
+        this.mailSender = mailSender;
     }
 
     public void checkAndNotify() {
@@ -42,30 +49,45 @@ public class NotificationService {
             }
 
             if (hoursUntilDue <= 4) {
-                sendSmsReminder(assignment);
+                sendEmail(
+                        assignment.getUser().getEmail(),
+                        "URGENT: " + assignment.getTitle() + " due in 4 hours!",
+                        "Hi! " + assignment.getUser().getName() + ",\n\n" +
+                                "Your assignment \"" + assignment.getTitle() + "\" for " +
+                                assignment.getCourseName() + " is due in less than 4 hours.\n\n" +
+                                "Have you submitted it yet? "
+                );
             } else if (hoursUntilDue <= 24) {
-                sendSecondEmailReminder(assignment);
+                sendEmail(
+                        assignment.getUser().getEmail(),
+                        "Reminder: " + assignment.getTitle() + " due in 24 hours",
+                        "Hi! " + assignment.getUser().getName() + ",\n\n" +
+                                "Your assignment \"" + assignment.getTitle() + "\" for " +
+                                assignment.getCourseName() + " is due in less than 24 hours. "
+                );
             } else if (hoursUntilDue <= 72) {
-                sendEmailReminder(assignment);
+                sendEmail(
+                        assignment.getUser().getEmail(),
+                        "Upcoming: " + assignment.getTitle() + " due in 3 days",
+                        "Hi " + assignment.getUser().getName() + ",\n\n" +
+                                "Your assignment \"" + assignment.getTitle() + "\" for " +
+                                assignment.getCourseName() + " is due in less than 72 hours. "
+                );
             }
         }
     }
 
-    private void sendEmailReminder(Assignment assignment) {
-        System.out.println("EMAIL REMINDER: " + assignment.getTitle()
-                + " for " + assignment.getCourseName()
-                + " is due in 72 hours or less.");
-    }
-
-    private void sendSecondEmailReminder(Assignment assignment) {
-        System.out.println("SECOND EMAIL REMINDER: " + assignment.getTitle()
-                + " for " + assignment.getCourseName()
-                + " is due in 24 hours or less.");
-    }
-
-    private void sendSmsReminder(Assignment assignment) {
-        System.out.println("SMS REMINDER: " + assignment.getTitle()
-                + " for " + assignment.getCourseName()
-                + " is due in 4 hours or less. Have you submitted?");
+    private void sendEmail(String to, String subject, String body) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("t51092567@gmail.com");
+            message.setTo(to);
+            message.setSubject(subject);
+            message.setText(body);
+            mailSender.send(message);
+            logger.info("Email sent to: {} | Subject: {}", to, subject);
+        } catch (Exception e) {
+            logger.error("Failed to send email to: {} | Error: {}", to, e.getMessage());
+        }
     }
 }
