@@ -27,7 +27,7 @@ export const userService = {
 };
 
 export const assignmentService = {
-    getAssignments: (userId) => api.get(`/users/${userId}/assignments`),
+    getMyAssignments: () => api.get('/users/me/assignments'),
 };
 
 export const canvasService = {
