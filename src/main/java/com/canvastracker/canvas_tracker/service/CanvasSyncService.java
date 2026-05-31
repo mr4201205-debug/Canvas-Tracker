@@ -28,8 +28,7 @@ public class CanvasSyncService {
         this.objectMapper = new ObjectMapper();
     }
 
-    public void syncAssignments() {
-        Long userId = 1L;
+    public void syncAssignments(Long userId) {
 
         userRepository.findById(userId).ifPresent(user -> {
             String coursesJson = canvasApiService.getCourses();

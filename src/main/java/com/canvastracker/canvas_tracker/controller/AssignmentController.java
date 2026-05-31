@@ -12,6 +12,7 @@ public class AssignmentController {
 
     private final AssignmentService assignmentService;
 
+
     public AssignmentController(AssignmentService assignmentService) {
         this.assignmentService = assignmentService;
     }
@@ -25,4 +26,6 @@ public class AssignmentController {
     public List<Assignment> getAssignments(@PathVariable Long userId) {
         return assignmentService.getAssignmentsByUser(userId);
     }
+
+
 }
