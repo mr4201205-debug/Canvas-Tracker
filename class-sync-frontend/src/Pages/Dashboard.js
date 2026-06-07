@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { userService, assignmentService } from '../Services/api';
 
+
 function Dashboard() {
     const [user, setUser] = useState(null);
     const [assignments, setAssignments] = useState([]);
@@ -30,11 +31,25 @@ function Dashboard() {
 
     const upcomingAssignments = assignments.filter(a => new Date(a.dueDate) > new Date()&& !a.submitted);
     const overdueAssignments = assignments.filter(a => new Date(a.dueDate) < new Date() && !a.submitted);
-
     const handleLogout = () => {
         localStorage.removeItem('token');
         navigate('/login');
     };
+
+    const handleMarkSubmitted = async (assignmentId) => {
+    try {
+        await assignmentService.markAsSubmitted(assignmentId);
+        setAssignments(assignments.map(a =>
+            a.id === assignmentId ? {...a, submitted: true} : a
+        ));
+    } catch (err) {
+        console.log('Error marking assignment as submitted', err);
+    }
+
+    
+};
+
+
 
     return (
         <div style={styles.container}>
@@ -58,6 +73,7 @@ function Dashboard() {
                         <h3 style={styles.cardNumber}>{upcomingAssignments.length}</h3>
                         <p style={styles.cardLabel}>Upcoming</p>
                     </div>
+                    
                     <div style={{...styles.card, borderTop: '4px solid #e63946'}}>
                         <h3 style={styles.cardNumber}>{overdueAssignments.length}</h3>
                         <p style={styles.cardLabel}>Overdue</p>
@@ -80,8 +96,16 @@ function Dashboard() {
                             </p>
                             <p style={styles.timeLeft}>{getHoursUntilDue(assignment.dueDate)}</p>
                         </div>
+
+                        <button
+                            style={styles.submitButton}
+                            onClick={() => handleMarkSubmitted(assignment.id)}>
+                            Mark as Submitted
+                        </button>
                     </div>
                 ))}
+
+                
 
                 {overdueAssignments.length > 0 && (
                     <>
@@ -215,7 +239,28 @@ const styles = {
         fontSize: '13px',
         fontWeight: 'bold',
         color: '#4361ee',
+
     },
+
+    submitButton: {
+    padding: '8px 16px',
+    backgroundColor: '#4cc9f0',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    fontSize: '13px',
+},
+
+unsubmitButton: {
+    padding: '8px 16px',
+    backgroundColor: '#4cc9f0',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    fontSize: '13px',
+},
 };
 
 export default Dashboard;

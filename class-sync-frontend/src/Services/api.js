@@ -22,13 +22,16 @@ export const authService = {
         api.post('/auth/register', { name, email, password, canvasUrl }),
 };
 
+export const assignmentService = {
+    getMyAssignments: () => api.get('/users/me/assignments'),
+    markAsSubmitted: (assignmentId) => api.put(`/users/me/assignments/${assignmentId}/submit`),
+};
+
 export const userService = {
     getMe: () => api.get('/users/me'),
 };
 
-export const assignmentService = {
-    getMyAssignments: () => api.get('/users/me/assignments'),
-};
+
 
 export const canvasService = {
     syncAssignments: () => api.get('/canvas/sync'),
