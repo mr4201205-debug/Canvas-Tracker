@@ -27,5 +27,12 @@ public class AssignmentController {
         return assignmentService.getAssignmentsByUser(userId);
     }
 
+    @PutMapping("/{assignmentId}/submit")
+    public Assignment markAsSubmitted(@PathVariable Long assignmentId) {
+        return assignmentService.markAsSubmitted(assignmentId);
+    }
+
+
+
 
 }

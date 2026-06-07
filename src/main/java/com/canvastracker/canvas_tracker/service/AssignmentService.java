@@ -24,6 +24,14 @@ public class AssignmentService {
             return assignmentRepository.save(assignment);
         }).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
     }
+    public Assignment markAsSubmitted(Long assignmentId) {
+        return assignmentRepository.findById(assignmentId).map(assignment -> {
+            assignment.setSubmitted(true);
+            return assignmentRepository.save(assignment);
+        }).orElseThrow(() -> new RuntimeException("Assignment not found with id: " + assignmentId));
+    }
+
+
 
     public List<Assignment> getAssignmentsByUser(Long userId) {
         return assignmentRepository.findByUserId(userId);

@@ -43,4 +43,11 @@ public class UserController {
                 .map(user -> assignmentService.getAssignmentsByUser(user.getId()))
                 .orElse(List.of());
     }
+
+    @PutMapping("/me/assignments/{assignmentId}/submit")
+    public Assignment markAsSubmitted(@PathVariable Long assignmentId) {
+        return assignmentService.markAsSubmitted(assignmentId);
+    }
+
+
 }
