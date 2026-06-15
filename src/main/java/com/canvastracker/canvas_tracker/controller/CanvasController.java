@@ -25,13 +25,13 @@ public class CanvasController {
     }
 
     @GetMapping("/courses")
-    public String getCourses() {
-        return canvasApiService.getCourses();
+    public String getCourses(String baseUrl, String token) {
+        return canvasApiService.getCourses(baseUrl, token);
     }
 
     @GetMapping("/courses/{courseId}/assignments")
-    public String getAssignments(@PathVariable String courseId) {
-        return canvasApiService.getAssignments(courseId);
+    public String getAssignments(@PathVariable String courseId, String baseUrl, String token) {
+        return canvasApiService.getAssignments(baseUrl, token, courseId);
     }
 
 

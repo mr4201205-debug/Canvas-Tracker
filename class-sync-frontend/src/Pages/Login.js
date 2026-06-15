@@ -24,27 +24,35 @@ function Login() {
                 <h1 style={styles.title}>ClassSync</h1>
                 <p style={styles.subtitle}>Never Miss a Deadline</p>
 
-                <input
-                    style={styles.input}
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
+                <form style={styles.form} onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+                    <input
+                        style={styles.input}
+                        type="email"
+                        name="username"
+                        id="username"
+                        autoComplete="username"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
 
-                <input
-                    style={styles.input}
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                    <input
+                        style={styles.input}
+                        type="password"
+                        name="password"
+                        id="password"
+                        autoComplete="current-password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
 
-                {error && <p style={styles.error}>{error}</p>}
+                    {error && <p style={styles.error}>{error}</p>}
 
-                <button style={styles.button} onClick={handleLogin}>
-                    Login
-                </button>
+                    <button style={styles.button} type="submit">
+                        Login
+                    </button>
+                </form>
 
                 <p style={styles.registerText}>
                     Don't have an account?{' '}
@@ -56,6 +64,13 @@ function Login() {
 }
 
 const styles = {
+
+    form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+},
+
     container: {
         display: 'flex',
         justifyContent: 'center',
