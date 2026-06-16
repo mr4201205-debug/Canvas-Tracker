@@ -31,8 +31,7 @@ public class CanvasSyncService {
     public void syncAssignments(Long userId) {
 
         userRepository.findById(userId).ifPresent(user -> {
-            String coursesJson = canvasApiService.getCourses(user.getCanvasToken(), user.getCanvasBaseUrl());
-
+            String coursesJson = canvasApiService.getCourses(user.getCanvasBaseUrl(), user.getCanvasToken());
             try {
                 JsonNode courses = objectMapper.readTree(coursesJson);
 
@@ -40,8 +39,7 @@ public class CanvasSyncService {
                     String courseId = course.get("id").asText();
                     String courseName = course.get("name").asText();
 
-                    String assignmentsJson = canvasApiService.getAssignments(courseId, user.getCanvasToken(), user.getCanvasBaseUrl());
-                    JsonNode assignments = objectMapper.readTree(assignmentsJson);
+                    String assignmentsJson = canvasApiService.getAssignments(user.getCanvasBaseUrl(), user.getCanvasToken(), courseId);                    JsonNode assignments = objectMapper.readTree(assignmentsJson);
 
                     for (JsonNode a : assignments) {
                         String canvasAssignmentId = a.get("id").asText();

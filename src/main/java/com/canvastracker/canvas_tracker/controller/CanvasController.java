@@ -25,13 +25,22 @@ public class CanvasController {
     }
 
     @GetMapping("/courses")
-    public String getCourses(String baseUrl, String token) {
-        return canvasApiService.getCourses(baseUrl, token);
+    public String getCourses(
+            org.springframework.security.core.Authentication authentication) {
+        String email = authentication.getName();
+        return userRepository.findByEmail(email)
+                .map(user -> canvasApiService.getCourses(user.getCanvasBaseUrl(), user.getCanvasToken()))
+                .orElse("User not found");
     }
 
     @GetMapping("/courses/{courseId}/assignments")
-    public String getAssignments(@PathVariable String courseId, String baseUrl, String token) {
-        return canvasApiService.getAssignments(baseUrl, token, courseId);
+    public String getAssignments(
+            @PathVariable String courseId,
+            org.springframework.security.core.Authentication authentication) {
+        String email = authentication.getName();
+        return userRepository.findByEmail(email)
+                .map(user -> canvasApiService.getAssignments(user.getCanvasBaseUrl(), user.getCanvasToken(), courseId))
+                .orElse("User not found");
     }
 
 
