@@ -18,8 +18,8 @@ export const authService = {
     login: (email, password) =>
         api.post('/auth/login', { email, password }),
 
-    register: (name, email, password, canvasUrl) =>
-        api.post('/auth/register', { name, email, password, canvasUrl }),
+    register: (name, email, password, canvasBaseUrl) =>
+        api.post('/auth/register', { name, email, password, canvasBaseUrl }),
 };
 
 export const assignmentService = {

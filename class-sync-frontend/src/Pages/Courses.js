@@ -219,7 +219,7 @@ const styles = {
 
     courseGrid: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
         gap: '20px',
     },
 
@@ -236,10 +236,13 @@ const styles = {
     },
 
     courseTitle: {
-        margin: '0 0 8px 0',
-        fontSize: '18px',
-        color: '#1a1a2e',
-    },
+    margin: '0 0 8px 0',
+    fontSize: '18px',
+    color: '#1a1a2e',
+    wordBreak: 'break-word',
+    overflowWrap: 'break-word',
+    lineHeight: '1.4',
+},
 
     courseId: {
         margin: 0,
