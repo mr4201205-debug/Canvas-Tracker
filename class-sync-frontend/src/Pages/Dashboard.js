@@ -80,6 +80,15 @@ function Dashboard() {
                 >
                     Courses
                 </Link>
+
+                <Link to="/settings" 
+                      style={{ 
+                        ...styles.sidebarItem, 
+                        textDecoration: 'none', 
+                        color: '#333' }}
+                        >
+                    Settings
+                </Link>
             </div>
 
             {/* MAIN CONTENT */}

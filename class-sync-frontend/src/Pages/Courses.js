@@ -55,7 +55,6 @@ function Courses() {
                     Dashboard
                 </Link>
 
-                {/* Active Courses Link */}
                 <div
                     style={{
                         ...styles.sidebarItem,
@@ -65,6 +64,14 @@ function Courses() {
                 >
                     Courses
                 </div>
+
+                <Link 
+                      to="/settings" style={{ ...styles.sidebarItem, textDecoration: 'none', color: '#333' }}>
+                      Settings
+                </Link>
+
+                
+                
             </div>
 
             {/* MAIN CONTENT */}
@@ -141,6 +148,7 @@ const styles = {
         borderRadius: "8px",
         fontSize: "14px",
         cursor: "pointer",
+        display: "block",
     },
 
     mainContent: {
