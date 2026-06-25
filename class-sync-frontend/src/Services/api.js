@@ -30,7 +30,7 @@ export const assignmentService = {
 export const userService = {
     getMe: () => api.get('/users/me'),
     updateProfile: (name, email, canvasBaseUrl) =>
-        api.put('/users/me', { name, canvasBaseUrl }),
+        api.put('/users/me', { name, email, canvasBaseUrl }),
     changePassword: (currentPassword, newPassword) =>
         api.put('/users/me/password', { currentPassword, newPassword }),
 };

@@ -1,7 +1,9 @@
 package com.canvastracker.canvas_tracker.controller;
 
 
+import com.canvastracker.canvas_tracker.model.NotificationPreference;
 import com.canvastracker.canvas_tracker.model.User;
+import com.canvastracker.canvas_tracker.repository.NotificationPreferenceRepository;
 import com.canvastracker.canvas_tracker.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -18,14 +20,18 @@ public class UserController {
     private final com.canvastracker.canvas_tracker.repository.UserRepository userRepository;
     private final AssignmentService assignmentService;
     private final PasswordEncoder passwordEncoder;
+    private final NotificationPreferenceRepository notificationPreferenceRepository;
 
 
     public UserController(UserService userService,
-                          com.canvastracker.canvas_tracker.repository.UserRepository userRepository, AssignmentService assignmentService, PasswordEncoder passwordEncoder) {
+                          com.canvastracker.canvas_tracker.repository.UserRepository userRepository,
+                          AssignmentService assignmentService, PasswordEncoder passwordEncoder,
+                          NotificationPreferenceRepository notificationPreferenceRepository) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.assignmentService = assignmentService;
         this.passwordEncoder = passwordEncoder;
+        this.notificationPreferenceRepository = notificationPreferenceRepository;
     }
 
 
@@ -81,6 +87,43 @@ public class UserController {
             user.setPassword(passwordEncoder.encode(newPassword));
             userRepository.save(user);
             return ResponseEntity.ok("Password changed successfully");
+        }).orElse(ResponseEntity.badRequest().body("User not found"));
+    }
+
+    @GetMapping("/me/preferences")
+    public ResponseEntity<?> getPreferences(
+            org.springframework.security.core.Authentication authentication) {
+        String email = authentication.getName();
+        return userRepository.findByEmail(email).map(user -> {
+            NotificationPreference pref = notificationPreferenceRepository
+                    .findByUserId(user.getId())
+                    .orElseGet(() -> {
+                        NotificationPreference newPref = new NotificationPreference();
+                        newPref.setUser(user);
+                        return notificationPreferenceRepository.save(newPref);
+                    });
+            return ResponseEntity.ok(pref);
+        }).orElse(ResponseEntity.badRequest().build());
+    }
+
+    @PutMapping("/me/preferences")
+    public ResponseEntity<String> updatePreferences(
+            @RequestBody NotificationPreference updatedPref,
+            org.springframework.security.core.Authentication authentication) {
+        String email = authentication.getName();
+        return userRepository.findByEmail(email).map(user -> {
+            NotificationPreference pref = notificationPreferenceRepository
+                    .findByUserId(user.getId())
+                    .orElseGet(() -> {
+                        NotificationPreference newPref = new NotificationPreference();
+                        newPref.setUser(user);
+                        return newPref;
+                    });
+            pref.setNotify72Hours(updatedPref.isNotify72Hours());
+            pref.setNotify24Hours(updatedPref.isNotify24Hours());
+            pref.setNotify4Hours(updatedPref.isNotify4Hours());
+            notificationPreferenceRepository.save(pref);
+            return ResponseEntity.ok("Preferences updated successfully");
         }).orElse(ResponseEntity.badRequest().body("User not found"));
     }
 

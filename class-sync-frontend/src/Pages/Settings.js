@@ -12,9 +12,20 @@ function Settings() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [profileMessage, setProfileMessage] = useState('');
     const [passwordMessage, setPasswordMessage] = useState('');
+    const [notify72, setNotify72] = useState(true);
+    const [notify24, setNotify24] = useState(true);
+    const [notify4, setNotify4] = useState(true);
+    const [prefMessage, setPrefMessage] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
+        userService.getPreferences()
+            .then(response => {
+                setNotify72(response.data.notify72Hours);
+                setNotify24(response.data.notify24Hours);
+                setNotify4(response.data.notify4Hours);
+            })
+            .catch(err => console.log('Error fetching preferences:', err));
         userService.getMe()
             .then(response => {
                 setUser(response.data);
@@ -24,6 +35,15 @@ function Settings() {
             })
             .catch(() => navigate('/login'));
     }, [navigate]);
+
+    const handleUpdatePreferences = async () => {
+        try {
+            await userService.updatePreferences(notify72, notify24, notify4);
+            setPrefMessage('Preferences saved successfully');
+            } catch (err) {
+        setPrefMessage('Failed to save preferences');
+        }
+    };
 
     const handleUpdateProfile = async () => {
         
@@ -129,6 +149,80 @@ function Settings() {
                         )}
                         <button style={styles.button} onClick={handleUpdateProfile}>
                             Save Changes
+                        </button>
+                    </div>
+
+                    <div style={styles.section}>
+                        <h2 style={styles.sectionTitle}>Notification Preferences</h2>
+                        <p style={{ color: '#666', fontSize: '13px', marginBottom: '16px' }}>
+                            Choose when you want to receive email reminders for upcoming assignments.
+                        </p>
+
+                        <div style={styles.toggleRow}>
+                            <div>
+                                <p style={styles.toggleLabel}>72 hour reminder</p>
+                                <p style={styles.toggleDesc}>Get an email 3 days before an assignment is due</p>
+                            </div>
+                            <label style={styles.switch}>
+                                <input
+                                    type="checkbox"
+                                    checked={notify72}
+                                    onChange={(e) => setNotify72(e.target.checked)}
+                                    style={{ display: 'none' }}
+                                />
+                                <span style={{
+                                    ...styles.slider,
+                                    backgroundColor: notify72 ? '#4361ee' : '#ccc'
+                                }} onClick={() => setNotify72(!notify72)} />
+                            </label>
+                        </div>
+
+                        <div style={styles.toggleRow}>
+                            <div>
+                                <p style={styles.toggleLabel}>24 hour reminder</p>
+                                <p style={styles.toggleDesc}>Get an email 1 day before an assignment is due</p>
+                            </div>
+                            <label style={styles.switch}>
+                                <input
+                                    type="checkbox"
+                                    checked={notify24}
+                                    onChange={(e) => setNotify24(e.target.checked)}
+                                    style={{ display: 'none' }}
+                                />
+                                <span style={{
+                                    ...styles.slider,
+                                    backgroundColor: notify24 ? '#4361ee' : '#ccc'
+                                }} onClick={() => setNotify24(!notify24)} />
+                            </label>
+                        </div>
+
+                        <div style={styles.toggleRow}>
+                            <div>
+                                <p style={styles.toggleLabel}>4 hour reminder</p>
+                                <p style={styles.toggleDesc}>Get an urgent email 4 hours before an assignment is due</p>
+                            </div>
+                            <label style={styles.switch}>
+                                <input
+                                    type="checkbox"
+                                    checked={notify4}
+                                    onChange={(e) => setNotify4(e.target.checked)}
+                                    style={{ display: 'none' }}
+                                />
+                                <span style={{
+                                    ...styles.slider,
+                                    backgroundColor: notify4 ? '#4361ee' : '#ccc'
+                                }} onClick={() => setNotify4(!notify4)} />
+                            </label>
+                        </div>
+
+                        {prefMessage && (
+                            <p style={{ color: prefMessage.includes('success') ? 'green' : 'red', fontSize: '13px' }}>
+                                {prefMessage}
+                            </p>
+                        )}
+
+                        <button style={styles.button} onClick={handleUpdatePreferences}>
+                            Save Preferences
                         </button>
                     </div>
 
@@ -246,7 +340,38 @@ const styles = {
         fontSize: '14px',
         marginTop: '8px',
     },
-    
+
+    toggleRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '20px',
+    paddingBottom: '20px',
+    borderBottom: '1px solid #f0f0f0',
+    },
+    toggleLabel: {
+        margin: '0 0 4px 0',
+        fontSize: '14px',
+        color: '#1a1a2e',
+        fontWeight: 'bold',
+    },
+    toggleDesc: {
+        margin: 0,
+        fontSize: '12px',
+        color: '#888',
+    },
+    switch: {
+        cursor: 'pointer',
+    },
+    slider: {
+        display: 'inline-block',
+        width: '44px',
+        height: '24px',
+        borderRadius: '12px',
+        cursor: 'pointer',
+        transition: 'background-color 0.2s',
+    },
+        
 };
 
 export default Settings;
