@@ -18,6 +18,8 @@ public class CanvasSyncService {
     private final AssignmentRepository assignmentRepository;
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
+    private static final org.slf4j.Logger logger =
+            org.slf4j.LoggerFactory.getLogger(CanvasSyncService.class);
 
     public CanvasSyncService(CanvasApiService canvasApiService,
                              AssignmentRepository assignmentRepository,
@@ -31,6 +33,15 @@ public class CanvasSyncService {
     public void syncAssignments(Long userId) {
 
         userRepository.findById(userId).ifPresent(user -> {
+
+            String token = user.getCanvasToken();
+            String canvasUrl = user.getCanvasBaseUrl();
+
+            if (token == null || canvasUrl == null || token.isEmpty() || canvasUrl.isEmpty()) {
+                logger.info("Skipping sync for user {} - missing Canvas credentials", userId);
+                return;
+            }
+
             String coursesJson = canvasApiService.getCourses(user.getCanvasBaseUrl(), user.getCanvasToken());
             try {
                 JsonNode courses = objectMapper.readTree(coursesJson);
