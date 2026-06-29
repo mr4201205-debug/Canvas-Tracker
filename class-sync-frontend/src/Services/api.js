@@ -33,6 +33,9 @@ export const userService = {
         api.put('/users/me', { name, email, canvasBaseUrl }),
     changePassword: (currentPassword, newPassword) =>
         api.put('/users/me/password', { currentPassword, newPassword }),
+    getPreferences: () => api.get('/users/me/preferences'),
+    updatePreferences: (notify72Hours, notify24Hours, notify4Hours) =>
+        api.put('/users/me/preferences', { notify72Hours, notify24Hours, notify4Hours }),
 };
 
 

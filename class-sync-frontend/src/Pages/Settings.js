@@ -157,45 +157,67 @@ function Settings() {
                         <p style={{ color: '#666', fontSize: '13px', marginBottom: '16px' }}>
                             Choose when you want to receive email reminders for upcoming assignments.
                         </p>
+                        
+                        {/* 72 hour reminder toggle */}  
+                    <div style={styles.toggleRow}> 
+                    <div> 
+                        <p style={styles.toggleLabel}>72 hour reminder</p> 
+                        <p style={styles.toggleDesc}>Get an email 3 days before an assignment is due</p> 
+                    </div> 
+                    <label style={styles.switch}> 
+                        <input 
+                        type="checkbox" 
+                        checked={notify72} 
+                        onChange={(e) => setNotify72(e.target.checked)} 
+                        style={{ display: 'none' }} 
+                        /> 
+                        {/* Slider Background */}
+                        <span style={{ ...styles.slider, backgroundColor: notify72 ? '#4361ee' : '#ccc', position: 'relative', display: 'inline-block', width: '40px', height: '20px', borderRadius: '10px' }}> 
+                        {/* Moving White Knob */}
+                        <span style={{ 
+                            position: 'absolute', 
+                            top: 2, 
+                            left: notify72 ? 22 : 2, 
+                            width: '16px', 
+                            height: '16px', 
+                            backgroundColor: 'white', 
+                            borderRadius: '50%', 
+                            transition: 'left 0.2s ease' 
+                        }} /> 
+                        </span> 
+                    </label> 
+                    </div>
 
-                        <div style={styles.toggleRow}>
-                            <div>
-                                <p style={styles.toggleLabel}>72 hour reminder</p>
-                                <p style={styles.toggleDesc}>Get an email 3 days before an assignment is due</p>
-                            </div>
-                            <label style={styles.switch}>
-                                <input
-                                    type="checkbox"
-                                    checked={notify72}
-                                    onChange={(e) => setNotify72(e.target.checked)}
-                                    style={{ display: 'none' }}
-                                />
-                                <span style={{
-                                    ...styles.slider,
-                                    backgroundColor: notify72 ? '#4361ee' : '#ccc'
-                                }} onClick={() => setNotify72(!notify72)} />
-                            </label>
-                        </div>
 
-                        <div style={styles.toggleRow}>
-                            <div>
-                                <p style={styles.toggleLabel}>24 hour reminder</p>
-                                <p style={styles.toggleDesc}>Get an email 1 day before an assignment is due</p>
-                            </div>
-                            <label style={styles.switch}>
-                                <input
-                                    type="checkbox"
-                                    checked={notify24}
-                                    onChange={(e) => setNotify24(e.target.checked)}
-                                    style={{ display: 'none' }}
-                                />
-                                <span style={{
-                                    ...styles.slider,
-                                    backgroundColor: notify24 ? '#4361ee' : '#ccc'
-                                }} onClick={() => setNotify24(!notify24)} />
-                            </label>
-                        </div>
 
+                        {/* 24 hour reminder toggle */}
+                    <div style={styles.toggleRow}>
+                    <div>
+                        <p style={styles.toggleLabel}>24 hour reminder</p>
+                        <p style={styles.toggleDesc}>Get an email 1 day before an assignment is due</p>
+                    </div>
+                    <label style={styles.switch}>
+                        <input 
+                        type="checkbox" 
+                        checked={notify24} 
+                        onChange={(e) => setNotify24(e.target.checked)} 
+                        style={{ display: 'none' }} 
+                        />
+                        <span style={{ ...styles.slider, backgroundColor: notify24 ? '#4361ee' : '#ccc', position: 'relative', display: 'inline-block', width: '40px', height: '20px', borderRadius: '10px' }}>
+                        <span style={{ 
+                            position: 'absolute', 
+                            top: 2, 
+                            left: notify24 ? 22 : 2, 
+                            width: '16px', 
+                            height: '16px', 
+                            backgroundColor: 'white', 
+                            borderRadius: '50%', 
+                            transition: 'left 0.2s ease' 
+                        }} />
+                        </span>
+                    </label>
+                    
+                    </div>
                         <div style={styles.toggleRow}>
                             <div>
                                 <p style={styles.toggleLabel}>4 hour reminder</p>
@@ -210,8 +232,20 @@ function Settings() {
                                 />
                                 <span style={{
                                     ...styles.slider,
-                                    backgroundColor: notify4 ? '#4361ee' : '#ccc'
-                                }} onClick={() => setNotify4(!notify4)} />
+                                    backgroundColor: notify4 ? '#4361ee' : '#ccc', 
+                                    position: 'relative', 
+                                    display: 'inline-block', 
+                                    width: '40px', height: '20px', 
+                                    borderRadius: '10px'
+                                }} >
+                                <span style={{ position: 'absolute', 
+                                        top: 2, left: notify4 ? 22 : 2, 
+                                        width: '16px', height: '16px', 
+                                        backgroundColor: 'white', 
+                                        borderRadius: '50%', 
+                                        transition: 'left 0.2s ease' 
+                                }} />
+                            </span>
                             </label>
                         </div>
 
@@ -361,15 +395,32 @@ const styles = {
         color: '#888',
     },
     switch: {
-        cursor: 'pointer',
+    position: 'relative',
+    display: 'inline-block',
+    width: '44px',
+    height: '24px',
+    cursor: 'pointer',
     },
     slider: {
-        display: 'inline-block',
-        width: '44px',
-        height: '24px',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
         borderRadius: '12px',
-        cursor: 'pointer',
         transition: 'background-color 0.2s',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '2px', // Gives padding around the white knob
+        boxSizing: 'border-box',
+    },
+    knob: {
+        width: '20px',
+        height: '20px',
+        backgroundColor: 'white',
+        borderRadius: '50%',
+        transition: 'transform 0.2s',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
     },
         
 };
