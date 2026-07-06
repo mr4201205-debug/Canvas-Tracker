@@ -19,8 +19,14 @@ public class CorsConfig {
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
+        config.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "https://classsync-abc123.netlify.app"
+        ));
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+
 }
