@@ -1,23 +1,21 @@
 services:
   - type: web
     name: classsync-backend
-    runtime: java
-    buildCommand: mvn clean package -DskipTests
-    startCommand: java -jar target/canvas-tracker-0.0.1-SNAPSHOT.jar
+    runtime: docker # Changed from java to docker
     envVars:
       - key: SPRING_DATASOURCE_URL
-        value: YOUR_RENDER_INTERNAL_DB_URL
+        sync: false
       - key: SPRING_DATASOURCE_USERNAME
-        value: YOUR_DB_USERNAME
+        sync: false
       - key: SPRING_DATASOURCE_PASSWORD
-        value: YOUR_DB_PASSWORD
+        sync: false
       - key: SPRING_MAIL_USERNAME
         value: t51092567@gmail.com
       - key: SPRING_MAIL_PASSWORD
-        value: YOUR_GMAIL_APP_PASSWORD
+        sync: false
       - key: JWT_SECRET
-        value: YOUR_JWT_SECRET
+        sync: false
       - key: CANVAS_API_TOKEN
-        value: YOUR_CANVAS_TOKEN
+        sync: false
       - key: CANVAS_API_BASE_URL
-        value: montclair.instructure.com
+        value: ://instructure.com
