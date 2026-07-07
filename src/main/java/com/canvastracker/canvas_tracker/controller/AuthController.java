@@ -3,11 +3,12 @@ package com.canvastracker.canvas_tracker.controller;
 import com.canvastracker.canvas_tracker.model.User;
 import com.canvastracker.canvas_tracker.repository.UserRepository;
 import com.canvastracker.canvas_tracker.security.JwtService;
+import com.canvastracker.canvas_tracker.service.EmailService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
-import org.springframework.mail.javamail.JavaMailSender;
+
 
 import java.util.Map;
 import java.util.Optional;
@@ -19,16 +20,16 @@ public class AuthController {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-    private final JavaMailSender mailSender;
+    private final EmailService emailService;
 
     public AuthController(UserRepository userRepository,
                           JwtService jwtService,
                           PasswordEncoder passwordEncoder,
-                            JavaMailSender mailSender) {
+                          EmailService emailService) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
-        this.mailSender = mailSender;
+        this.emailService = emailService;
     }
 
     @PostMapping("/register")
@@ -43,12 +44,8 @@ public class AuthController {
         userRepository.save(user);
 
         String verifyUrl = "https://classsync-backend.onrender.com/auth/verify?token=" + token;
-        org.springframework.mail.SimpleMailMessage message = new org.springframework.mail.SimpleMailMessage();
-        message.setFrom("t51092567@gmail.com");
-        message.setTo(user.getEmail());
-        message.setSubject("Verify your ClassSync account");
-        message.setText("Hi " + user.getName() + ",\n\nClick this link to verify your account:\n" + verifyUrl + "\n\nClassSync");
-        mailSender.send(message);
+
+        emailService.sendVerificationEmail(user.getEmail(), user.getName(), verifyUrl);
 
         return ResponseEntity.ok("Registration successful. Please check your email to verify your account.");
     }
