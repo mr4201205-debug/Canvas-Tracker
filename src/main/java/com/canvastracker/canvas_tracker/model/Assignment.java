@@ -18,6 +18,8 @@ public class Assignment {
     private Double gradeWeight;
     private boolean submitted;
 
+    private java.time.LocalDateTime lastNotifiedAt;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -30,6 +32,8 @@ public class Assignment {
     public Double getGradeWeight() { return gradeWeight; }
     public boolean isSubmitted() { return submitted; }
     public User getUser() { return user; }
+    public java.time.LocalDateTime getLastNotifiedAt() { return lastNotifiedAt; }
+
 
     public void setId(Long id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
@@ -39,5 +43,6 @@ public class Assignment {
     public void setGradeWeight(Double gradeWeight) { this.gradeWeight = gradeWeight; }
     public void setSubmitted(boolean submitted) { this.submitted = submitted; }
     public void setUser(User user) { this.user = user; }
+    public void setLastNotifiedAt(java.time.LocalDateTime lastNotifiedAt) { this.lastNotifiedAt = lastNotifiedAt; }
 
 }

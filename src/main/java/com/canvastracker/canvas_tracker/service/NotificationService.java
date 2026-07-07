@@ -49,9 +49,23 @@ public class NotificationService {
             }
 
             long hoursUntilDue = ChronoUnit.HOURS.between(now, dueDate);
-
             if (hoursUntilDue < 0) {
                 continue;
+            }
+
+            LocalDateTime lastNotified = assignment.getLastNotifiedAt();
+            if (lastNotified != null) {
+                long hoursSinceLastEmail = ChronoUnit.HOURS.between(lastNotified, now);
+
+                // 1. If we are in the 24h or 72h window, block it if it's been less than 23 hours
+                if (hoursUntilDue > 4 && hoursSinceLastEmail < 23) {
+                    continue;
+                }
+
+                // 2. If we are in the urgent 4h window, block it only if we already sent one in the last 3 hours
+                if (hoursUntilDue <= 4 && hoursSinceLastEmail < 3) {
+                    continue;
+                }
             }
 
             Long userId = assignment.getUser().getId();
@@ -88,6 +102,8 @@ public class NotificationService {
                                 "Your assignment \"" + assignment.getTitle() + "\" for " +
                                 assignment.getCourseName() + " is due in less than 72 hours. "
                 );
+                assignment.setLastNotifiedAt(now);
+                assignmentRepository.save(assignment);
             }
         }
     }
