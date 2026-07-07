@@ -2,6 +2,7 @@ package com.canvastracker.canvas_tracker.model;
 
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
 
 @Entity
 @Table(name = "users")
@@ -19,7 +20,10 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String canvasBaseUrl;
+
+    @Column(name = "is_verified")
     private boolean isVerified = false;
+
     private String verificationToken;
 
     public Long getId() { return id; }
