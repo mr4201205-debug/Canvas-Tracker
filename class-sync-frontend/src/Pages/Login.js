@@ -8,13 +8,23 @@ function Login() {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    // 1. Added loading state tracker
+    const [loading, setLoading] = useState(false); 
+
     const handleLogin = async () => {
+
+        // 2. Set loading to true immediately when login starts
+        setLoading(true); 
+        setError(''); 
         try {
             const response = await authService.login(email, password);
             localStorage.setItem('token', response.data);
             navigate('/dashboard');
         } catch (err) {
             setError('Invalid email or password');
+        } finally {
+            // 3. Turn off loading when the request completes (success or fail)
+            setLoading(false); 
         }
     };
 
@@ -49,8 +59,15 @@ function Login() {
 
                     {error && <p style={styles.error}>{error}</p>}
 
-                    <button style={styles.button} type="submit">
-                        Login
+                    <button style={{
+                            ...styles.button,
+                            backgroundColor: loading ? '#a5b4fc' : '#4361ee',
+                            cursor: loading ? 'not-allowed' : 'pointer'
+                        }} 
+                        type="submit"
+                        disabled={loading}
+                    >
+                        {loading ? 'Connecting to Server...' : 'Login'}
                     </button>
                 </form>
 
