@@ -69,7 +69,7 @@ function Dashboard() {
                     Dashboard
                 </div>
 
-                {/* Navigation link to your new Courses file */}
+                
                 <Link 
                     to="/courses" 
                     style={{ 

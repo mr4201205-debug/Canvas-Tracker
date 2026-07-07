@@ -6,14 +6,14 @@ function Register() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [canvasUrl, setCanvasUrl] = useState('');
+    const [canvasBaseUrl, setCanvasBaseUrl] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleRegister = async () => {
-        if (!name || !email || !password || !canvasUrl) {
+        if (!name || !email || !password || !canvasBaseUrl) {
             setError('All fields are required');
             return;
         }
@@ -22,7 +22,7 @@ function Register() {
         setError('');
 
         try {
-            await authService.register(name, email, password, canvasUrl);
+            await authService.register(name, email, password, canvasBaseUrl);
             setSuccess('Account created successfully! Redirecting to login...');
             setTimeout(() => navigate('/login'), 2000);
         } catch (err) {
@@ -66,8 +66,8 @@ function Register() {
                     style={styles.input}
                     type="text"
                     placeholder="Canvas URL (e.g. montclair.instructure.com)"
-                    value={canvasUrl}
-                    onChange={(e) => setCanvasUrl(e.target.value)}
+                    value={canvasBaseUrl}
+                    onChange={(e) => setCanvasBaseUrl(e.target.value)}
                 />
 
                 {error && <p style={styles.error}>{error}</p>}

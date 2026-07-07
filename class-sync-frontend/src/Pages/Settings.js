@@ -216,7 +216,7 @@ function Settings() {
                         }} />
                         </span>
                     </label>
-                    
+                    {/* 4 hour reminder toggle */}
                     </div>
                         <div style={styles.toggleRow}>
                             <div>
