@@ -17,7 +17,7 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
-    @Async
+
     public void sendVerificationEmail(String toEmail, String name, String verifyUrl) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
