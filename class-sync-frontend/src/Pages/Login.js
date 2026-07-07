@@ -21,7 +21,7 @@ function Login() {
             localStorage.setItem('token', response.data);
             navigate('/dashboard');
         } catch (err) {
-            setError('Invalid email or password');
+            setError('Invalid credentials or unverified email address.');
         } finally {
             // 3. Turn off loading when the request completes (success or fail)
             setLoading(false); 
