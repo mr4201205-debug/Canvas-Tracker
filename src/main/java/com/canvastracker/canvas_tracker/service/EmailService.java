@@ -18,6 +18,7 @@ public class EmailService {
     }
 
 
+    @Async
     public void sendVerificationEmail(String toEmail, String name, String verifyUrl) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
