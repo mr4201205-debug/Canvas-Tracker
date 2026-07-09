@@ -1,12 +1,10 @@
 package com.canvastracker.canvas_tracker.service;
 
 import com.canvastracker.canvas_tracker.model.Assignment;
-import com.canvastracker.canvas_tracker.repository.AssignmentRepository;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
-import com.canvastracker.canvas_tracker.repository.NotificationPreferenceRepository;
 import com.canvastracker.canvas_tracker.model.NotificationPreference;
+import com.canvastracker.canvas_tracker.repository.AssignmentRepository;
+import com.canvastracker.canvas_tracker.repository.NotificationPreferenceRepository;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -15,21 +13,18 @@ import java.util.List;
 @Service
 public class NotificationService {
 
-    private final AssignmentRepository assignmentRepository;
-    private final CanvasApiService canvasApiService;
-    private final JavaMailSender mailSender;
-    private final NotificationPreferenceRepository notificationPreferenceRepository;
-
     private static final org.slf4j.Logger logger =
             org.slf4j.LoggerFactory.getLogger(NotificationService.class);
 
+    private final AssignmentRepository assignmentRepository;
+    private final EmailService emailService;
+    private final NotificationPreferenceRepository notificationPreferenceRepository;
+
     public NotificationService(AssignmentRepository assignmentRepository,
-                               CanvasApiService canvasApiService,
-                               JavaMailSender mailSender,
+                               EmailService emailService,
                                NotificationPreferenceRepository notificationPreferenceRepository) {
         this.assignmentRepository = assignmentRepository;
-        this.canvasApiService = canvasApiService;
-        this.mailSender = mailSender;
+        this.emailService = emailService;
         this.notificationPreferenceRepository = notificationPreferenceRepository;
     }
 
@@ -37,6 +32,7 @@ public class NotificationService {
         List<Assignment> assignments = assignmentRepository.findAll();
 
         for (Assignment assignment : assignments) {
+
             if (assignment.isSubmitted()) {
                 continue;
             }
@@ -49,26 +45,30 @@ public class NotificationService {
             }
 
             long hoursUntilDue = ChronoUnit.HOURS.between(now, dueDate);
+
             if (hoursUntilDue < 0) {
                 continue;
             }
 
             LocalDateTime lastNotified = assignment.getLastNotifiedAt();
-            if (lastNotified != null) {
-                long hoursSinceLastEmail = ChronoUnit.HOURS.between(lastNotified, now);
 
-                // 1. If we are in the 24h or 72h window, block it if it's been less than 23 hours
+            if (lastNotified != null) {
+                long hoursSinceLastEmail =
+                        ChronoUnit.HOURS.between(lastNotified, now);
+
+                // Prevent duplicate 72h and 24h reminders
                 if (hoursUntilDue > 4 && hoursSinceLastEmail < 23) {
                     continue;
                 }
 
-                // 2. If we are in the urgent 4h window, block it only if we already sent one in the last 3 hours
+                // Allow another urgent reminder every 3 hours
                 if (hoursUntilDue <= 4 && hoursSinceLastEmail < 3) {
                     continue;
                 }
             }
 
             Long userId = assignment.getUser().getId();
+
             NotificationPreference pref = notificationPreferenceRepository
                     .findByUserId(userId)
                     .orElse(null);
@@ -77,48 +77,66 @@ public class NotificationService {
             boolean notify24 = pref == null || pref.isNotify24Hours();
             boolean notify4 = pref == null || pref.isNotify4Hours();
 
+            String userEmail = assignment.getUser().getEmail();
+            String userName = assignment.getUser().getName();
+            String title = assignment.getTitle();
+            String course = assignment.getCourseName();
+
             if (hoursUntilDue <= 4 && notify4) {
-                sendEmail(
-                        assignment.getUser().getEmail(),
-                        "URGENT: " + assignment.getTitle() + " due in 4 hours!",
-                        "Hi! " + assignment.getUser().getName() + ",\n\n" +
-                                "Your assignment \"" + assignment.getTitle() + "\" for " +
-                                assignment.getCourseName() + " is due in less than 4 hours.\n\n" +
-                                "Have you submitted it yet? "
+
+                emailService.sendNotificationEmail(
+                        userEmail,
+                        "URGENT: " + title + " due in 4 hours!",
+                        "<h2>Urgent Reminder</h2>"
+                                + "<p>Hi " + userName + ",</p>"
+                                + "<p>Your assignment <strong>" + title
+                                + "</strong> for <strong>" + course
+                                + "</strong> is due in less than <strong>4 hours</strong>.</p>"
+                                + "<p>Have you submitted it yet?</p>"
+                                + "<p>ClassSync</p>"
                 );
-            } else if (hoursUntilDue > 4 && hoursUntilDue <= 24 && notify24) {
-                sendEmail(
-                        assignment.getUser().getEmail(),
-                        "Reminder: " + assignment.getTitle() + " due in 24 hours",
-                        "Hi! " + assignment.getUser().getName() + ",\n\n" +
-                                "Your assignment \"" + assignment.getTitle() + "\" for " +
-                                assignment.getCourseName() + " is due in less than 24 hours. "
-                );
-            } else if (hoursUntilDue > 24 && hoursUntilDue <= 72 &&notify72) {
-                sendEmail(
-                        assignment.getUser().getEmail(),
-                        "Upcoming: " + assignment.getTitle() + " due in 3 days",
-                        "Hi " + assignment.getUser().getName() + ",\n\n" +
-                                "Your assignment \"" + assignment.getTitle() + "\" for " +
-                                assignment.getCourseName() + " is due in less than 72 hours. "
-                );
+
                 assignment.setLastNotifiedAt(now);
                 assignmentRepository.save(assignment);
-            }
-        }
-    }
 
-    private void sendEmail(String to, String subject, String body) {
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("t51092567@gmail.com");
-            message.setTo(to);
-            message.setSubject(subject);
-            message.setText(body);
-            mailSender.send(message);
-            logger.info("Email sent to: {} | Subject: {}", to, subject);
-        } catch (Exception e) {
-            logger.error("Failed to send email to: {} | Error: {}", to, e.getMessage());
+                logger.info("Sent 4-hour reminder for assignment {}", assignment.getId());
+
+            } else if (hoursUntilDue > 4 && hoursUntilDue <= 24 && notify24) {
+
+                emailService.sendNotificationEmail(
+                        userEmail,
+                        "Reminder: " + title + " due in 24 hours",
+                        "<h2>Assignment Reminder</h2>"
+                                + "<p>Hi " + userName + ",</p>"
+                                + "<p>Your assignment <strong>" + title
+                                + "</strong> for <strong>" + course
+                                + "</strong> is due in less than <strong>24 hours</strong>.</p>"
+                                + "<p>ClassSync</p>"
+                );
+
+                assignment.setLastNotifiedAt(now);
+                assignmentRepository.save(assignment);
+
+                logger.info("Sent 24-hour reminder for assignment {}", assignment.getId());
+
+            } else if (hoursUntilDue > 24 && hoursUntilDue <= 72 && notify72) {
+
+                emailService.sendNotificationEmail(
+                        userEmail,
+                        "Upcoming: " + title + " due in 3 days",
+                        "<h2>Upcoming Assignment</h2>"
+                                + "<p>Hi " + userName + ",</p>"
+                                + "<p>Your assignment <strong>" + title
+                                + "</strong> for <strong>" + course
+                                + "</strong> is due in less than <strong>72 hours</strong>.</p>"
+                                + "<p>ClassSync</p>"
+                );
+
+                assignment.setLastNotifiedAt(now);
+                assignmentRepository.save(assignment);
+
+                logger.info("Sent 72-hour reminder for assignment {}", assignment.getId());
+            }
         }
     }
 }

@@ -1,9 +1,11 @@
 package com.canvastracker.canvas_tracker.service;
 
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import okhttp3.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 public class EmailService {
@@ -11,25 +13,52 @@ public class EmailService {
     private static final org.slf4j.Logger logger =
             org.slf4j.LoggerFactory.getLogger(EmailService.class);
 
-    private final JavaMailSender mailSender;
+    private final OkHttpClient client = new OkHttpClient();
 
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
-
+    @Value("${resend.api.key}")
+    private String apiKey;
 
     @Async
     public void sendVerificationEmail(String toEmail, String name, String verifyUrl) {
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("t51092567@gmail.com");
-            message.setTo(toEmail);
-            message.setSubject("Verify your ClassSync account");
-            message.setText("Hi " + name + ",\n\nClick this link to verify your account:\n" + verifyUrl + "\n\nClassSync");
-            mailSender.send(message);
-            logger.info("Verification email sent to: {}", toEmail);
-        } catch (Exception e) {
-            logger.error("Failed to send verification email to: {} | Error: {}", toEmail, e.getMessage());
+        String html = "<h2>Welcome to ClassSync</h2><p>Hi " + name + ",</p><p><a href='" + verifyUrl + "'>Click here to verify your account</a></p><p>ClassSync</p>";
+        sendEmail(toEmail, "Verify your ClassSync account", html);
+    }
+
+    @Async
+    public void sendNotificationEmail(String toEmail, String subject, String html) {
+        sendEmail(toEmail, subject, html);
+    }
+
+    private void sendEmail(String toEmail, String subject, String html) {
+        String json = """
+        {
+          "from": "onboarding@resend.dev",
+          "to": ["%s"],
+          "subject": "%s",
+          "html": "%s"
+        }
+        """.formatted(toEmail, subject, html.replace("\"", "\\\"").replace("\n", ""));
+
+        RequestBody body = RequestBody.create(
+                json,
+                MediaType.parse("application/json")
+        );
+
+        Request request = new Request.Builder()
+                .url("https://api.resend.com/emails")
+                .addHeader("Authorization", "Bearer " + apiKey)
+                .addHeader("Content-Type", "application/json")
+                .post(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                logger.info("Email sent to: {} | Subject: {}", toEmail, subject);
+            } else {
+                logger.error("Resend error for {}: {}", toEmail, response.body().string());
+            }
+        } catch (IOException e) {
+            logger.error("Failed to send email to: {} | Error: {}", toEmail, e.getMessage());
         }
     }
 }

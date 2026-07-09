@@ -15,6 +15,7 @@ import java.util.Optional;
 
 
 @RestController
+
 @RequestMapping("/auth")
 public class AuthController {
 
@@ -31,6 +32,11 @@ public class AuthController {
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+    }
+
+    @GetMapping("/health")
+    public ResponseEntity<String> health() {
+        return ResponseEntity.ok("OK");
     }
 
     @PostMapping("/register")
