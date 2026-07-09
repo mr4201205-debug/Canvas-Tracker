@@ -44,7 +44,7 @@ public class AuthController {
         user.setVerificationToken(token);
         userRepository.save(user);
 
-        String verifyUrl = "https://classsync-backend.onrender.com/auth/verify?token=" + token;
+        String verifyUrl = "https://canvas-tracker.onrender.com/auth/verify?token=" + token;
 
         emailService.sendVerificationEmail(user.getEmail(), user.getName(), verifyUrl);
 
