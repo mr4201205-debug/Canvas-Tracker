@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "users")
 
@@ -20,6 +22,9 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String canvasBaseUrl;
+    private String passwordResetToken;
+    private java.time.LocalDateTime passwordResetExpiry;
+
 
     @Column(name = "is_verified")
     private boolean isVerified = false;
@@ -35,6 +40,8 @@ public class User {
     public String getVerificationToken() { return verificationToken; }
 
     public String getPassword(){return password;}
+    public String getPasswordResetToken(){return passwordResetToken;}
+    public LocalDateTime getPasswordResetExpiry() {return passwordResetExpiry;}
 
     public void setId(Long id) { this.id = id; }
     public void setName(String name) { this.name = name; }
@@ -44,4 +51,6 @@ public class User {
     public void setPassword(String password){this.password = password;}
     public void setVerified(boolean verified) { isVerified = verified; }
     public void setVerificationToken(String verificationToken) { this.verificationToken = verificationToken; }
+    public void setPasswordResetToken (String passwordResetToken) {this.passwordResetToken = passwordResetToken;}
+    public void setPasswordResetExpiry ( LocalDateTime passwordResetExpiry) {this.passwordResetExpiry = passwordResetExpiry;}
 }

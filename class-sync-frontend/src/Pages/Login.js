@@ -74,6 +74,13 @@ function Login() {
                 <p style={styles.registerText}>
                     Don't have an account?{' '}
                     <Link to="/register" style={styles.link}>Register here</Link>
+                    
+                </p>
+
+                <p style={styles.registerText}>
+                    <Link to="/forgot-password" style={styles.link}>
+                     Forgot your password?
+                    </Link>
                 </p>
             </div>
         </div>

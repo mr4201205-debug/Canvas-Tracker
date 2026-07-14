@@ -61,4 +61,10 @@ public class EmailService {
             logger.error("Failed to send email to: {} | Error: {}", toEmail, e.getMessage());
         }
     }
+    @Async
+    public void sendPasswordResetEmail(String toEmail, String name, String resetUrl) {
+        String html = "<h2>Reset your ClassSync password</h2><p>Hi " + name + ",</p><p><a href='" + resetUrl + "'>Click here to reset your password</a></p><p>This link expires in 1 hour.</p><p>If you did not request this, ignore this email.</p><p>ClassSync</p>";
+        sendEmail(toEmail, "Reset your ClassSync password", html);
+    }
+
 }

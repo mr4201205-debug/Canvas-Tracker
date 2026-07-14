@@ -22,6 +22,12 @@ export const authService = {
 
     register: (name, email, password, canvasBaseUrl) =>
         api.post('/auth/register', { name, email, password, canvasBaseUrl }),
+
+    forgotPassword: (email) =>
+     api.post('/auth/forgot-password', { email }, { headers: { 'Content-Type': 'application/json' } }),
+
+    resetPassword: (token, newPassword) =>
+    api.post('/auth/reset-password', { token, newPassword }),
 };
 
 export const assignmentService = {
