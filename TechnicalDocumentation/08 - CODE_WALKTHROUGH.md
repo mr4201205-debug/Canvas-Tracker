@@ -1,0 +1,2 @@
+# Understanding the Codebase
+### This section contains comprehensive technical documentation for each module, detailing their respective architecture and workflows. You can access the external Google Docs via the links provided below. 

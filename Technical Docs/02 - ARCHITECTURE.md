@@ -1,1 +1,0 @@
-# System Design, Tech Stack & diagrams
