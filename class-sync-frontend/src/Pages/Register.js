@@ -23,8 +23,8 @@ function Register() {
 
         try {
             await authService.register(name, email, password, canvasBaseUrl);
-            setSuccess('Account created successfully! Redirecting to login...');
-            setTimeout(() => navigate('/login'), 2000);
+            setSuccess('Account created successfully! Check inbox or spam folder for verification link.');
+            setTimeout(() => navigate('/login'), 3000);
         } catch (err) {
             setError('Email already registered or something went wrong');
         } finally {

@@ -16,7 +16,7 @@ function Verify() {
             return;
         }
 
-        axios.get(`https://classsync-backend.onrender.com/auth/verify?token=${token}`)
+        axios.get(`https://canvas-tracker.onrender.com/auth/verify?token=${token}`)
             .then(() => {
                 setSuccess(true);
                 setMessage('Email verified successfully. Redirecting to login...');
