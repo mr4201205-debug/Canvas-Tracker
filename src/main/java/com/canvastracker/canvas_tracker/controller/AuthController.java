@@ -4,6 +4,7 @@ import com.canvastracker.canvas_tracker.model.User;
 import com.canvastracker.canvas_tracker.repository.UserRepository;
 import com.canvastracker.canvas_tracker.security.JwtService;
 import com.canvastracker.canvas_tracker.service.EmailService;
+import com.canvastracker.canvas_tracker.service.EncryptionService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +35,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
+
     public AuthController(UserRepository userRepository,
                           JwtService jwtService,
                           PasswordEncoder passwordEncoder,
@@ -42,6 +44,7 @@ public class AuthController {
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+
     }
 
     @GetMapping("/health")

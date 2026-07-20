@@ -1,5 +1,6 @@
 package com.canvastracker.canvas_tracker.controller;
 
+import com.canvastracker.canvas_tracker.service.EncryptionService;
 import com.canvastracker.canvas_tracker.service.NotificationService;
 import com.canvastracker.canvas_tracker.service.CanvasApiService;
 import com.canvastracker.canvas_tracker.service.CanvasSyncService;
@@ -14,14 +15,20 @@ public class CanvasController {
     private final CanvasSyncService canvasSyncService;
     private final NotificationService notificationService;
     private final UserRepository userRepository;
+    private final EncryptionService encryptionService;
 
 
 
-    public CanvasController(CanvasApiService canvasApiService, CanvasSyncService canvasSyncService, NotificationService notificationService, UserRepository userRepository) {
+    public CanvasController(CanvasApiService canvasApiService,
+                            CanvasSyncService canvasSyncService,
+                            NotificationService notificationService,
+                            UserRepository userRepository,
+                            EncryptionService encryptionService) {
         this.canvasApiService = canvasApiService;
         this.canvasSyncService = canvasSyncService;
         this.notificationService = notificationService;
         this.userRepository = userRepository;
+        this.encryptionService = encryptionService;
     }
 
     @GetMapping("/courses")
@@ -29,7 +36,8 @@ public class CanvasController {
             org.springframework.security.core.Authentication authentication) {
         String email = authentication.getName();
         return userRepository.findByEmail(email)
-                .map(user -> canvasApiService.getCourses(user.getCanvasBaseUrl(), user.getCanvasToken()))
+                .map(user -> canvasApiService.getCourses(user.getCanvasBaseUrl(),
+                        encryptionService.decrypt(user.getCanvasToken())))
                 .orElse("User not found");
     }
 
@@ -39,7 +47,7 @@ public class CanvasController {
             org.springframework.security.core.Authentication authentication) {
         String email = authentication.getName();
         return userRepository.findByEmail(email)
-                .map(user -> canvasApiService.getAssignments(user.getCanvasBaseUrl(), user.getCanvasToken(), courseId))
+                .map(user -> canvasApiService.getAssignments(user.getCanvasBaseUrl(),  encryptionService.decrypt(user.getCanvasToken()), courseId))
                 .orElse("User not found");
     }
 

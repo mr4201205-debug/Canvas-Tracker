@@ -4,6 +4,7 @@ package com.canvastracker.canvas_tracker.controller;
 import com.canvastracker.canvas_tracker.model.NotificationPreference;
 import com.canvastracker.canvas_tracker.model.User;
 import com.canvastracker.canvas_tracker.repository.NotificationPreferenceRepository;
+import com.canvastracker.canvas_tracker.service.EncryptionService;
 import com.canvastracker.canvas_tracker.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -21,17 +22,20 @@ public class UserController {
     private final AssignmentService assignmentService;
     private final PasswordEncoder passwordEncoder;
     private final NotificationPreferenceRepository notificationPreferenceRepository;
+    private final EncryptionService encryptionService;
 
 
     public UserController(UserService userService,
                           com.canvastracker.canvas_tracker.repository.UserRepository userRepository,
                           AssignmentService assignmentService, PasswordEncoder passwordEncoder,
-                          NotificationPreferenceRepository notificationPreferenceRepository) {
+                          NotificationPreferenceRepository notificationPreferenceRepository,
+                          EncryptionService encryptionService) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.assignmentService = assignmentService;
         this.passwordEncoder = passwordEncoder;
         this.notificationPreferenceRepository = notificationPreferenceRepository;
+        this.encryptionService = encryptionService;
     }
 
 
@@ -67,6 +71,9 @@ public class UserController {
             user.setName(updatedUser.getName());
             user.setCanvasBaseUrl(updatedUser.getCanvasBaseUrl());
             user.setEmail(updatedUser.getEmail());
+            if (updatedUser.getCanvasToken() != null && !updatedUser.getCanvasToken().isEmpty()) {
+                user.setCanvasToken(encryptionService.encrypt(updatedUser.getCanvasToken()));
+            }
             userRepository.save(user);
             return ResponseEntity.ok("Profile updated successfully");
         }).orElse(ResponseEntity.badRequest().body("User not found"));

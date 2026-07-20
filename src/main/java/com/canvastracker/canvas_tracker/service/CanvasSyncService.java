@@ -18,15 +18,18 @@ public class CanvasSyncService {
     private final AssignmentRepository assignmentRepository;
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
+    private final EncryptionService encryptionService;
     private static final org.slf4j.Logger logger =
             org.slf4j.LoggerFactory.getLogger(CanvasSyncService.class);
 
     public CanvasSyncService(CanvasApiService canvasApiService,
                              AssignmentRepository assignmentRepository,
-                             UserRepository userRepository) {
+                             UserRepository userRepository,
+                             EncryptionService encryptionService) {
         this.canvasApiService = canvasApiService;
         this.assignmentRepository = assignmentRepository;
         this.userRepository = userRepository;
+        this.encryptionService = encryptionService;
         this.objectMapper = new ObjectMapper();
     }
 
@@ -34,7 +37,7 @@ public class CanvasSyncService {
 
         userRepository.findById(userId).ifPresent(user -> {
 
-            String token = user.getCanvasToken();
+            String token = encryptionService.decrypt(user.getCanvasToken());
             String canvasUrl = user.getCanvasBaseUrl();
 
             if (token == null || canvasUrl == null || token.isEmpty() || canvasUrl.isEmpty()) {
