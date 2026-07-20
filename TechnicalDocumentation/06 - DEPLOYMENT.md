@@ -8,17 +8,18 @@
 ## Environment Variables
 
 ### Backend (set in Render dashboard)
-| Variable | Description | Example |
-|----------|-------------|-|
+| Variable | Description | Example                  |
+|----------|-------------|--------------------------|
 | SPRING_DATASOURCE_URL | Internal Render DB URL | jdbc:postgresql://host/db |
-| SPRING_DATASOURCE_USERNAME | DB username | |
-| SPRING_DATASOURCE_PASSWORD | DB password | strongpassword |
-| SPRING_MAIL_USERNAME | Gmail address (legacy) | - |
-| SPRING_MAIL_PASSWORD | Gmail app password (legacy) | - |
-| RESEND_API_KEY | Resend API key | re_xxx |
-| JWT_SECRET | Secret for signing tokens | long-random-string |
-| CANVAS_API_TOKEN | Personal Canvas token | |
+| SPRING_DATASOURCE_USERNAME | DB username |                          |
+| SPRING_DATASOURCE_PASSWORD | DB password | strongpassword           |
+| SPRING_MAIL_USERNAME | Gmail address (legacy) | -                        |
+| SPRING_MAIL_PASSWORD | Gmail app password (legacy) | -                        |
+| RESEND_API_KEY | Resend API key | re_xxx                   |
+| JWT_SECRET | Secret for signing tokens | long-random-string       |
+| CANVAS_API_TOKEN | Personal Canvas token |                          |
 | CANVAS_API_BASE_URL | Canvas base URL | montclair.instructure.com |
+| ENCRYPTION_SECRET | AES key for encrypting Canvas tokens |                          |
 
 ### Frontend (set in Netlify dashboard or .env.local locally)
 | Variable | Description |

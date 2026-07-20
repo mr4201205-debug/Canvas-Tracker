@@ -33,7 +33,9 @@ Courses.js (Sync button click)
 
 → Check user has canvasToken and canvasBaseUrl (skip if null)
 
-→ CanvasApiService.getCourses(canvasBaseUrl, canvasToken)
+→ Encrypt canvasToken if not null
+
+→ CanvasApiService.getCourses(BaseUrl, Token `decrypted canvas token`)
 
 → GET https://{canvasBaseUrl}/api/v1/courses?enrollment_state=active
 

@@ -35,7 +35,7 @@ ClassSync is a full-stack web application that tracks Canvas LMS assignments and
 ## System Architecture
 
 ```mermaid
-Flowchart TD
+Flowchart
     A["React Frontend - Netlify"] -->|HTTPS + REST API| B["Spring Boot API - Render"]
 
     B --> C["Spring Security + JWT Authentication"]
@@ -69,7 +69,8 @@ com.canvastracker.canvas_tracker/
 │   ├── CanvasApiService.java      # Dispatches direct outbound HTTP requests to Canvas endpoints
 │   ├── CanvasSyncService.java     # Processes raw payloads pulled from Canvas to sync records
 │   ├── NotificationService.java   # Evaluates active task parameters to identify due reminders
-│   └── EmailService.java          # Handles final email generation and distribution via Resend
+│   ├── EmailService.java          # Handles final email generation and distribution via Resend
+│   └── EncryptionService.java     # AES encrypt/decrypt for sensitive fields
 │
 ├── repository/
 │   ├── UserRepository.java        # Data interface mapping user entity CRUD parameters

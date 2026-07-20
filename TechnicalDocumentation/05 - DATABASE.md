@@ -11,7 +11,7 @@
 Column                | Type         | Description
 id                    | bigint (PK)  | Auto-generated unique identifier
 canvas_base_url       | varchar(255) | e.g. montclair.instructure.com
-canvas_token          | varchar(255) | Canvas API access token (write-only in API)
+canvas_token          | varchar(255) | AES encrypted Canvas API token (write-only in API)
 email                 | varchar(255) | Login email, must be unique
 name                  | varchar(255) | Student's full name 
 password              | varchar(255) | BCrypt hashed password
