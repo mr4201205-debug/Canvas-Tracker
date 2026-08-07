@@ -31,7 +31,7 @@ ClassSync connects to your Canvas account and automatically sends email reminder
 
 Full technical documentation is in the `TechnicalDocumentation` folder:
 
-- [Architecture](02%20-%20ARCHITECTURE.md)
+- [Architecture](TechnicalDocumentation/02%20-%20ARCHITECTURE.md)
 - [API Reference](03%20-%20API.md)
 - [Database Schema](05%20-%20DATABASE.md)
 - [Feature Flows](04%20-%20FEATURES.md)
