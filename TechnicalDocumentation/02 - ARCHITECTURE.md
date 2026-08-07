@@ -24,7 +24,7 @@ ClassSync is a full-stack web application that tracks Canvas LMS assignments and
 
 ### Database
 - **Engine:** PostgreSQL 16
-- **Hosting:** Render (production), localhost (development)
+- **Hosting:** Supabase (production), localhost (development)
 
 ### Infrastructure
 - **Backend Hosting:** Render (Docker container)
@@ -43,7 +43,7 @@ Flowchart
     C --> D["Controllers"]
     D --> E["Services"]
     E --> F["Repositories"]
-    F --> G[("PostgreSQL - Render")]
+    F --> G[("PostgreSQL - Supabase")]
 
     B --> H["Resend API - Email Notifications"]
     B --> I["Canvas LMS API"]
