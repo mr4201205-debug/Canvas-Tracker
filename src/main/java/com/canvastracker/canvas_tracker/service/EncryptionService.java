@@ -42,3 +42,9 @@ public class EncryptionService {
         }
     }
 }
+
+/* AES encryption example -
+* canvas token - canvas1234
+* code splits token into 16 charcter block and adds xxxx.. to fill the rest
+*  code uses secret password to convert canvas1234 to binary bytes &j&...
+* using base64 bytes get converted to readable text that gets saved to databse - h73dbvk1...*/

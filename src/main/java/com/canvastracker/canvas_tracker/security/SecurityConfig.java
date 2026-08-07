@@ -48,3 +48,7 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 }
+
+/* BCrypt - generates a unique string of text that attaches to new password
+* uses math to cramble them 1024 times to make it impossible to guess the password.
+* code overwrites plain password with scrambled password and saves to database */
