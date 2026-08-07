@@ -3,7 +3,7 @@
 ## Architecture
 - **Backend:** Docker container on Render
 - **Frontend:** Static site on Netlify
-- **Database:** PostgreSQL on Render
+- **Database:** PostgreSQL on Supabase
 
 ## Environment Variables
 

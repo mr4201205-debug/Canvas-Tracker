@@ -1,7 +1,7 @@
 # All Tables, Columns & Relationships
 
 ## Connection
-- **Production:** Render PostgreSQL (internal URL in environment variables)
+- **Production:** Supabase PostgreSQL (external URL in environment variables in Render)
 - **Local:** `jdbc:postgresql://localhost:5432/canvas_tracker`
 
 ## Tables -
