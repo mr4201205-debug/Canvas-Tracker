@@ -1,5 +1,5 @@
 # Project Overview & Setup Instructions
-### ClassSync is a smart Canvas assignment tracker that sends personalized email reminders to students before deadlines.
+### ClassSync is a smart Canvas assignment tracker that sends personalized email reminders to students before assignment deadlines.
 
 ## What it does
 ClassSync connects to your Canvas account and automatically sends email reminders at 72 hours, 24 hours, and 4 hours before assignments are due. You can customize which reminders you receive and mark assignments as submitted to stop getting reminders for them.
