@@ -19,17 +19,20 @@ public class CanvasSyncService {
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
     private final EncryptionService encryptionService;
+    private final EmailService emailService;
     private static final org.slf4j.Logger logger =
             org.slf4j.LoggerFactory.getLogger(CanvasSyncService.class);
 
     public CanvasSyncService(CanvasApiService canvasApiService,
                              AssignmentRepository assignmentRepository,
                              UserRepository userRepository,
-                             EncryptionService encryptionService) {
+                             EncryptionService encryptionService,
+                             EmailService emailService) {
         this.canvasApiService = canvasApiService;
         this.assignmentRepository = assignmentRepository;
         this.userRepository = userRepository;
         this.encryptionService = encryptionService;
+        this.emailService = emailService;
         this.objectMapper = new ObjectMapper();
     }
 
@@ -47,6 +50,15 @@ public class CanvasSyncService {
 
             String coursesJson = canvasApiService.getCourses(user.getCanvasBaseUrl(), user.getCanvasToken());
             try {
+
+                if (coursesJson == null ||
+                        coursesJson.contains("\"status\":\"unauthenticated\"") ||
+                        coursesJson.contains("Invalid access token") ||
+                        coursesJson.contains("\"errors\"")) {
+                    logger.warn("Canvas token invalid or expired for user {}", userId);
+                    emailService.sendTokenExpiredEmail(user.getEmail(), user.getName(), canvasUrl);
+                    return;
+                }
                 JsonNode courses = objectMapper.readTree(coursesJson);
 
                 for (JsonNode course : courses) {
