@@ -34,16 +34,19 @@ public class AuthController {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final EncryptionService encryptionService;
 
 
     public AuthController(UserRepository userRepository,
                           JwtService jwtService,
                           PasswordEncoder passwordEncoder,
-                          EmailService emailService) {
+                          EmailService emailService,
+                          EncryptionService encryptionService) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+        this.encryptionService = encryptionService;
 
     }
 
@@ -59,6 +62,11 @@ public class AuthController {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setVerified(false);
+
+        if (user.getCanvasToken() != null && !user.getCanvasToken().isEmpty()) {
+            user.setCanvasToken(encryptionService.encrypt(user.getCanvasToken()));
+        }
+
         String token = UUID.randomUUID().toString();
         user.setVerificationToken(token);
         userRepository.save(user);
