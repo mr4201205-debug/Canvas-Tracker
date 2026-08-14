@@ -10,6 +10,7 @@ function Settings() {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [canvasToken, setCanvasToken] = useState('');
     const [profileMessage, setProfileMessage] = useState('');
     const [passwordMessage, setPasswordMessage] = useState('');
     const [notify72, setNotify72] = useState(true);
@@ -49,7 +50,7 @@ function Settings() {
         
         try {
             const emailChanged = email !== user.email;
-            await userService.updateProfile(name, email, canvasBaseUrl);
+            await userService.updateProfile(name, email, canvasBaseUrl, canvasToken);
             setProfileMessage('Profile updated successfully');
              if (emailChanged) {
                 alert('Email updated successfully! Please log in again with your new email.');
@@ -141,6 +142,28 @@ function Settings() {
                                 value={canvasBaseUrl}
                                 onChange={(e) => setCanvasBaseUrl(e.target.value)}
                             />
+                        </div>
+
+                        <div style={styles.field}>
+                            <label style={styles.label}>Canvas API Token</label>
+                            <input
+                                style={styles.input}
+                                type="password"
+                                placeholder="Paste new token here to update"
+                                value={canvasToken}
+                                onChange={(e) => setCanvasToken(e.target.value)}
+                            />
+                            <p style={{ fontSize: '11px', color: '#888', margin: '4px 0 0 0' }}>
+                                Generate at{' '}
+                                <a 
+                                    href={`https://${canvasBaseUrl}/profile/settings`}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    style={{ color: '#4361ee' }}>
+                                    Canvas Profile Settings
+                                </a>
+                                {' '}under Approved Integrations.
+                            </p>
                         </div>
                         {profileMessage && (
                             <p style={{ color: profileMessage.includes('success') ? 'green' : 'red', fontSize: '13px' }}>

@@ -20,8 +20,8 @@ export const authService = {
     login: (email, password) =>
         api.post('/auth/login', { email, password }),
 
-    register: (name, email, password, canvasBaseUrl) =>
-        api.post('/auth/register', { name, email, password, canvasBaseUrl }),
+    register: (name, email, password, canvasBaseUrl, canvasToken) =>
+        api.post('/auth/register', { name, email, password, canvasBaseUrl, canvasToken }),
 
     forgotPassword: (email) =>
      api.post('/auth/forgot-password', { email }, { headers: { 'Content-Type': 'application/json' } }),
@@ -37,8 +37,8 @@ export const assignmentService = {
 
 export const userService = {
     getMe: () => api.get('/users/me'),
-    updateProfile: (name, email, canvasBaseUrl) =>
-        api.put('/users/me', { name, email, canvasBaseUrl }),
+    updateProfile: (name, email, canvasBaseUrl, canvasToken) =>
+        api.put('/users/me', { name, email, canvasBaseUrl, canvasToken }),
     changePassword: (currentPassword, newPassword) =>
         api.put('/users/me/password', { currentPassword, newPassword }),
     getPreferences: () => api.get('/users/me/preferences'),

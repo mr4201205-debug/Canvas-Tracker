@@ -7,13 +7,14 @@ function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [canvasBaseUrl, setCanvasBaseUrl] = useState('');
+    const [canvasToken, setCanvasToken] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleRegister = async () => {
-        if (!name || !email || !password || !canvasBaseUrl) {
+        if (!name || !email || !password || !canvasBaseUrl || !canvasToken) {
             setError('All fields are required');
             return;
         }
@@ -69,6 +70,27 @@ function Register() {
                     value={canvasBaseUrl}
                     onChange={(e) => setCanvasBaseUrl(e.target.value)}
                 />
+
+                <div>
+                <input
+                    style={styles.input}
+                    type="password"
+                    placeholder="Canvas API Token"
+                    value={canvasToken}
+                    onChange={(e) => setCanvasToken(e.target.value)}
+                />
+                <p style={{ fontSize: '11px', color: '#888', margin: '4px 0 0 0' }}>
+                    Generate your token at{' '}
+                    <a 
+                        href="https://montclair.instructure.com/profile/settings" 
+                        target="_blank" 
+                        rel="noreferrer"
+                        style={{ color: '#4361ee' }}>
+                        Canvas Profile Settings
+                    </a>
+                    {' '}under Approved Integrations. You can also add this later in Settings.
+                </p>
+            </div>
 
                 {error && <p style={styles.error}>{error}</p>}
                 {success && <p style={styles.success}>{success}</p>}
