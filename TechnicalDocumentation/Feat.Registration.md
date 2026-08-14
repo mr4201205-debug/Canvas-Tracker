@@ -9,8 +9,9 @@ Allow new students to create a ClassSync account. Accounts require email verific
 
 ### Backend Classes
 - `AuthController.java` - `POST /auth/register`
-- `EmailService.java` - `sendVerificationEmail()`
+- `EmailService.java` - `sendVerificationEmail(), sendTokenExpiredEmail()`
 - `UserRepository.java` - `save()`, `findByEmail()`
+- `CanvasSyncService.java`
 
 ### Database Tables
 - `users` - inserts new row
