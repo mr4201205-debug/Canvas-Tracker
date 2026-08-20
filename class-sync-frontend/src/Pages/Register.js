@@ -147,6 +147,8 @@ const styles = {
         border: '1px solid #ddd',
         fontSize: '14px',
         outline: 'none',
+        width: '100%',             
+        boxSizing: 'border-box', 
     },
     error: {
         color: 'red',
