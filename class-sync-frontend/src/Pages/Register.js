@@ -23,7 +23,7 @@ function Register() {
         setError('');
 
         try {
-            await authService.register(name, email, password, canvasBaseUrl);
+            await authService.register(name, email, password, canvasBaseUrl, canvasToken);
             setSuccess('Account created successfully! Check inbox or spam folder for verification link.');
             setTimeout(() => navigate('/login'), 3000);
         } catch (err) {

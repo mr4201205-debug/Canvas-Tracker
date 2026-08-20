@@ -33,6 +33,7 @@ function Settings() {
                 setName(response.data.name);
                 setEmail(response.data.email || ''); 
                 setCanvasBaseUrl(response.data.canvasBaseUrl || '');
+                setCanvasToken(response.data.canvasToken || '');
             })
             .catch(() => navigate('/login'));
     }, [navigate]);
