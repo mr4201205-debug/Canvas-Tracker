@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 public class CanvasSyncService {
@@ -71,6 +72,8 @@ public class CanvasSyncService {
                         String canvasAssignmentId = a.get("id").asText();
                         String dueAtStr = a.get("due_at").asText();
 
+
+
                         if (dueAtStr.equals("null") || dueAtStr.isEmpty()) {
                             continue;
                         }
@@ -83,13 +86,21 @@ public class CanvasSyncService {
                             continue;
                         }
 
-                        boolean alreadyExists = assignmentRepository
+                        boolean isSubmitted = a.has("has_submitted_submissions") &&
+                                a.get("has_submitted_submissions").asBoolean();
+
+                        Optional<Assignment> existingOpt = assignmentRepository
                                 .findByUserId(userId)
                                 .stream()
-                                .anyMatch(existing -> existing.getTitle().equals(a.get("name").asText())
-                                        && existing.getCourseName().equals(courseName));
+                                .filter(existing -> existing.getTitle().equals(a.get("name").asText())
+                                        && existing.getCourseName().equals(courseName))
+                                .findFirst();
 
-                        if (alreadyExists) {
+                        if (existingOpt.isPresent()) {
+                            Assignment existing = existingOpt.get();
+                            existing.setSubmitted(isSubmitted);
+                            existing.setDueDate(dueDate);
+                            assignmentRepository.save(existing);
                             continue;
                         }
 
@@ -100,6 +111,9 @@ public class CanvasSyncService {
                         assignment.setPoints(a.get("points_possible").asDouble());
                         assignment.setSubmitted(false);
                         assignment.setUser(user);
+
+
+                        assignment.setSubmitted(isSubmitted);
 
                         assignmentRepository.save(assignment);
                     }
