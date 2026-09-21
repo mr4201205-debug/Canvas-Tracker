@@ -4,6 +4,8 @@
 ## What it does
 ClassSync connects to your Canvas account and automatically sends email reminders at 72 hours, 24 hours, and 4 hours before assignments are due. You can customize which reminders you receive and mark assignments as submitted to stop getting reminders for them.
 
+**Overview -** https://youtu.be/ofpCD5Q3I9Y
+
 ## Live App
 
 **Frontend:** https://classsync33.netlify.app  
