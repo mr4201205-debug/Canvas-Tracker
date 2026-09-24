@@ -4,8 +4,15 @@
 ## What it does
 ClassSync connects to your Canvas account and automatically sends email reminders at 72 hours, 24 hours, and 4 hours before assignments are due. You can customize which reminders you receive and mark assignments as submitted to stop getting reminders for them.
 
-**Overview -** https://youtu.be/ofpCD5Q3I9Y
-**Technical Overview -** https://youtu.be/QQQo9srFw1c
+### Project Overview
+[Watch the Overview Video](https://youtu.be/ofpCD5Q3I9Y)
+
+This video provides a high-level demonstration of ClassSync from a user's perspective. It walks through the core user experience, showing how students connect their Canvas accounts, customize their personal notification frequencies, and interact with the main dashboard to mark assignments as completed.
+
+### Technical Overview
+[Watch the Technical Walkthrough](https://youtu.be/QQQo9srFw1c)
+
+This video dives deep into the system architecture and backend workflows. It covers the full-stack implementation—including how the Spring Boot server handles secure communication with the React frontend, manages JWT authentication tokens, orchestrates Docker containers, and runs the automated email scheduling service.
 
 ## Live App
 
