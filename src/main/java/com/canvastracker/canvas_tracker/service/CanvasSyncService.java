@@ -42,6 +42,8 @@ public class CanvasSyncService {
         userRepository.findById(userId).ifPresent(user -> {
 
             String token = encryptionService.decrypt(user.getCanvasToken());
+            logger.info("Decrypted token length: {}", token != null ? token.length() : 0);
+            logger.info("Decrypted token starts with: {}", token != null && token.length() > 10 ? token.substring(0, 10) : "null");
             String canvasUrl = user.getCanvasBaseUrl();
 
             if (token == null || canvasUrl == null || token.isEmpty() || canvasUrl.isEmpty()) {
@@ -118,8 +120,18 @@ public class CanvasSyncService {
                         assignmentRepository.save(assignment);
                     }
                 }
-            } catch (JsonProcessingException e) {
+            }
+            catch (org.springframework.web.reactive.function.client.WebClientResponseException e) {
+                if (e.getStatusCode().value() == 401) {
+                    logger.warn("Canvas token expired for user {} - sending notification email", userId);
+                    emailService.sendTokenExpiredEmail(user.getEmail(), user.getName(), canvasUrl);
+                } else {
+                    logger.error("Canvas API error for user {}: {} {}", userId, e.getStatusCode(), e.getMessage());
+                }
+            }catch (JsonProcessingException e) {
                 System.out.println("Error parsing Canvas data: " + e.getMessage());
+            }catch (Exception e) {
+                logger.error("Unexpected error during sync for user {}: {}", userId, e.getMessage());
             }
         });
     }
