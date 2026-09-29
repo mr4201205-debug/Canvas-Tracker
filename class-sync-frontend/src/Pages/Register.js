@@ -88,7 +88,7 @@ function Register() {
                         style={{ color: '#4361ee' }}>
                         Canvas Profile Settings
                     </a>
-                    {' '}under Approved Integrations. You can also add this later in Settings.
+                    {' '}under Approved Integrations. You can also update this later in Settings.
                 </p>
             </div>
 
