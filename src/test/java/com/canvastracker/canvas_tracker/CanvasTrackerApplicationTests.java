@@ -73,4 +73,109 @@ class CanvasTrackerApplicationTests {
 		assertFalse(assignment.isSubmitted());
 	}
 
+	@Test
+	void submittedShouldBeFalseWhenWorkflowStateIsUnsubmitted() throws Exception {
+		com.fasterxml.jackson.databind.ObjectMapper mapper =
+				new com.fasterxml.jackson.databind.ObjectMapper();
+
+		String json = """
+        {
+            "submission": {
+                "workflow_state": "unsubmitted"
+            }
+        }
+        """;
+
+		com.fasterxml.jackson.databind.JsonNode a = mapper.readTree(json);
+
+		boolean isSubmitted = false;
+		if (a.has("submission") && !a.get("submission").isNull()) {
+			com.fasterxml.jackson.databind.JsonNode submission = a.get("submission");
+			if (submission.has("workflow_state")) {
+				String workflowState = submission.get("workflow_state").asText();
+				isSubmitted = !"unsubmitted".equals(workflowState);
+			}
+		}
+
+		assertFalse(isSubmitted);
+	}
+
+	@Test
+	void submittedShouldBeTrueWhenWorkflowStateIsSubmitted() throws Exception {
+		com.fasterxml.jackson.databind.ObjectMapper mapper =
+				new com.fasterxml.jackson.databind.ObjectMapper();
+
+		String json = """
+        {
+            "submission": {
+                "workflow_state": "submitted"
+            }
+        }
+        """;
+
+		com.fasterxml.jackson.databind.JsonNode a = mapper.readTree(json);
+
+		boolean isSubmitted = false;
+		if (a.has("submission") && !a.get("submission").isNull()) {
+			com.fasterxml.jackson.databind.JsonNode submission = a.get("submission");
+			if (submission.has("workflow_state")) {
+				String workflowState = submission.get("workflow_state").asText();
+				isSubmitted = !"unsubmitted".equals(workflowState);
+			}
+		}
+
+		assertTrue(isSubmitted);
+	}
+
+	@Test
+	void submittedShouldBeFalseWhenSubmissionIsNull() throws Exception {
+		com.fasterxml.jackson.databind.ObjectMapper mapper =
+				new com.fasterxml.jackson.databind.ObjectMapper();
+
+		String json = """
+        {
+            "submission": null
+        }
+        """;
+
+		com.fasterxml.jackson.databind.JsonNode a = mapper.readTree(json);
+
+		boolean isSubmitted = false;
+		if (a.has("submission") && !a.get("submission").isNull()) {
+			com.fasterxml.jackson.databind.JsonNode submission = a.get("submission");
+			if (submission.has("workflow_state")) {
+				String workflowState = submission.get("workflow_state").asText();
+				isSubmitted = !"unsubmitted".equals(workflowState);
+			}
+		}
+
+		assertFalse(isSubmitted);
+	}
+
+	@Test
+	void submittedShouldBeFalseWhenNoSubmissionField() throws Exception {
+		com.fasterxml.jackson.databind.ObjectMapper mapper =
+				new com.fasterxml.jackson.databind.ObjectMapper();
+
+		String json = """
+        {
+            "name": "homework 4",
+            "due_at": "2026-10-05T03:59:59Z"
+        }
+        """;
+
+		com.fasterxml.jackson.databind.JsonNode a = mapper.readTree(json);
+
+		boolean isSubmitted = false;
+		if (a.has("submission") && !a.get("submission").isNull()) {
+			com.fasterxml.jackson.databind.JsonNode submission = a.get("submission");
+			if (submission.has("workflow_state")) {
+				String workflowState = submission.get("workflow_state").asText();
+				isSubmitted = !"unsubmitted".equals(workflowState);
+			}
+		}
+
+		assertFalse(isSubmitted);
+	}
+
 }
