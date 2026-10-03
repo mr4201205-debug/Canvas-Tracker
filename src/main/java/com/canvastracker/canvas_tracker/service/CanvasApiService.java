@@ -31,7 +31,7 @@ public class CanvasApiService{
     public String getAssignments(String baseUrl, String token, String courseId) {
         return buildClient(baseUrl, token)
                 .get()
-                .uri("/api/v1/courses/" + courseId + "/assignments?per_page=50")
+                .uri("/api/v1/courses/" + courseId + "/assignments?per_page=50&include[]=submission")
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();

@@ -88,8 +88,15 @@ public class CanvasSyncService {
                             continue;
                         }
 
-                        boolean isSubmitted = a.has("has_submitted_submissions") &&
-                                a.get("has_submitted_submissions").asBoolean();
+                        boolean isSubmitted = false;
+
+                        if (a.has("submission") && !a.get("submission").isNull()) {
+                            JsonNode submission = a.get("submission");
+                            if (submission.has("workflow_state")) {
+                                String workflowState = submission.get("workflow_state").asText();
+                                isSubmitted = !"unsubmitted".equals(workflowState);
+                            }
+                        }
 
                         Optional<Assignment> existingOpt = assignmentRepository
                                 .findByUserId(userId)
