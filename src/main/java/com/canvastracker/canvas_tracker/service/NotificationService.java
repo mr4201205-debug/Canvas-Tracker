@@ -20,6 +20,10 @@ public class NotificationService {
     private final EmailService emailService;
     private final NotificationPreferenceRepository notificationPreferenceRepository;
 
+
+// Generate getters and setters for these fields...
+
+
     public NotificationService(AssignmentRepository assignmentRepository,
                                EmailService emailService,
                                NotificationPreferenceRepository notificationPreferenceRepository) {
@@ -29,6 +33,8 @@ public class NotificationService {
     }
 
     public void checkAndNotify() {
+
+
         List<Assignment> assignments = assignmentRepository.findAll();
 
         for (Assignment assignment : assignments) {
@@ -50,22 +56,6 @@ public class NotificationService {
                 continue;
             }
 
-            LocalDateTime lastNotified = assignment.getLastNotifiedAt();
-
-            if (lastNotified != null) {
-                long hoursSinceLastEmail =
-                        ChronoUnit.HOURS.between(lastNotified, now);
-
-                // Prevent duplicate 72h and 24h reminders
-                if (hoursUntilDue > 4 && hoursSinceLastEmail < 23) {
-                    continue;
-                }
-
-                // Allow another urgent reminder every 3 hours
-                if (hoursUntilDue <= 4 && hoursSinceLastEmail < 3) {
-                    continue;
-                }
-            }
 
             Long userId = assignment.getUser().getId();
 
@@ -82,7 +72,7 @@ public class NotificationService {
             String title = assignment.getTitle();
             String course = assignment.getCourseName();
 
-            if (hoursUntilDue <= 4 && notify4) {
+            if (hoursUntilDue <= 4 && !assignment.isNotified4h() && notify4) {
 
                 emailService.sendNotificationEmail(
                         userEmail,
@@ -97,11 +87,12 @@ public class NotificationService {
                 );
 
                 assignment.setLastNotifiedAt(now);
+                assignment.setNotified4h(true);
                 assignmentRepository.save(assignment);
 
                 logger.info("Sent 4-hour reminder for assignment {}", assignment.getId());
 
-            } else if (hoursUntilDue > 4 && hoursUntilDue <= 24 && notify24) {
+            } else if (hoursUntilDue > 4 && hoursUntilDue <= 24 && !assignment.isNotified24h() && notify24) {
 
                 emailService.sendNotificationEmail(
                         userEmail,
@@ -113,13 +104,13 @@ public class NotificationService {
                                 + "</strong> is due in less than <strong>24 hours</strong>.</p>"
                                 + "<p>ClassSync</p>"
                 );
-
                 assignment.setLastNotifiedAt(now);
+                assignment.setNotified24h(true);
                 assignmentRepository.save(assignment);
 
                 logger.info("Sent 24-hour reminder for assignment {}", assignment.getId());
 
-            } else if (hoursUntilDue > 24 && hoursUntilDue <= 72 && notify72) {
+            } else if (hoursUntilDue > 24 && hoursUntilDue <= 72 && !assignment.isNotified72h() && notify72) {
 
                 emailService.sendNotificationEmail(
                         userEmail,
@@ -133,6 +124,7 @@ public class NotificationService {
                 );
 
                 assignment.setLastNotifiedAt(now);
+                assignment.setNotified72h(true);
                 assignmentRepository.save(assignment);
 
                 logger.info("Sent 72-hour reminder for assignment {}", assignment.getId());

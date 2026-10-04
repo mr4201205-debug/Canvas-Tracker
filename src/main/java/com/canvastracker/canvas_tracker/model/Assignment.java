@@ -17,6 +17,10 @@ public class Assignment {
     private Double points;
     private Double gradeWeight;
     private boolean submitted;
+    private boolean notified72h = false;
+    private boolean notified24h = false;
+    private boolean notified4h = false;
+
 
     private java.time.LocalDateTime lastNotifiedAt;
 
@@ -33,6 +37,10 @@ public class Assignment {
     public boolean isSubmitted() { return submitted; }
     public User getUser() { return user; }
     public java.time.LocalDateTime getLastNotifiedAt() { return lastNotifiedAt; }
+    public boolean isNotified72h() { return notified72h; }
+    public boolean isNotified24h() { return notified24h; }
+    public boolean isNotified4h() { return notified4h; }
+
 
 
     public void setId(Long id) { this.id = id; }
@@ -44,5 +52,9 @@ public class Assignment {
     public void setSubmitted(boolean submitted) { this.submitted = submitted; }
     public void setUser(User user) { this.user = user; }
     public void setLastNotifiedAt(java.time.LocalDateTime lastNotifiedAt) { this.lastNotifiedAt = lastNotifiedAt; }
+    public void setNotified72h(boolean notified72h) { this.notified72h = notified72h; }
+    public void setNotified24h(boolean notified24h) { this.notified24h = notified24h; }
+    public void setNotified4h(boolean notified4h) { this.notified4h = notified4h; }
+
 
 }
