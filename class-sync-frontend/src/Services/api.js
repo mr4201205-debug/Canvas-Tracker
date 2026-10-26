@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_BASE_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:8080' 
-  : 'https://canvas-tracker.onrender.com';
+  : 'https://api.classsync.cloud';
 
 const api = axios.create({
     baseURL: API_BASE_URL,
