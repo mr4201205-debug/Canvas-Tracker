@@ -32,7 +32,7 @@ public class EmailService {
     private void sendEmail(String toEmail, String subject, String html) {
         String json = """
         {
-          "from": "onboarding@resend.dev",
+          "from": "noreply@classsync.cloud",
           "to": ["%s"],
           "subject": "%s",
           "html": "%s"
@@ -79,7 +79,7 @@ public class EmailService {
                 "<li>Click <strong>New Access Token</strong></li>" +
                 "<li>Set a purpose like 'ClassSync', generate the token, and set the furthest due date</li>" +
                 "<li>Copy the token immediately, Canvas only shows it once</li>" +
-                "<li>Go to <a href='https://classsync33.netlify.app/settings'>ClassSync Settings</a></li>" +
+                "<li>Go to <a href='https://classsync.cloud/settings'>ClassSync Settings</a></li>" +
                 "<li>Paste the token in the Canvas API Token field and click 'Save Changes'</li>" +
                 "</ol>" +
                 "<p>If you need help, reply to this email.</p>" +
