@@ -16,8 +16,8 @@ This video dives deep into the system architecture and backend workflows. It cov
 
 ## Live App
 
-**Frontend:** https://classsync33.netlify.app  
-**Backend API:** https://canvas-tracker.onrender.com
+**Frontend:** https://classsync.cloud  
+**Backend API:** https://api.classsync.cloud
 
 ## Features
 
