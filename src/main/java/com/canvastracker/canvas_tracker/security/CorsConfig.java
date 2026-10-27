@@ -21,7 +21,7 @@ public class CorsConfig {
 
         config.setAllowedOrigins(List.of(
                 "http://localhost:3000",
-                "https://classsync33.netlify.app"
+                "https://classsync33.netlify.app",
                 "https://classsync.cloud",
                 "https://www.classsync.cloud"
         ));
