@@ -123,7 +123,6 @@ function Login() {
 const styles = {
     page: {
         display: 'flex',
-        minHeight: '100vh',
         minHeight: '100dvh',
         fontFamily: "'Segoe UI', system-ui, sans-serif",
     },
