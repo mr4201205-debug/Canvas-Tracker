@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Login.css';
 import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '../Services/api';
 
@@ -29,9 +30,8 @@ function Login() {
     };
 
     return (
-    <div style={styles.page}>
-        {/* Left Panel */}
-        <div style={styles.leftPanel}>
+    <div className="login-page" style={styles.page}>        {/* Left Panel */}
+        <div className="login-left-panel" style={styles.leftPanel}>
             <div style={styles.leftContent}>
                 <h1 style={styles.brandName}>ClassSync</h1>
                 <p style={styles.brandTagline}>Never miss a deadline again.</p>
@@ -53,8 +53,8 @@ function Login() {
         </div>
 
         {/* Right Panel */}
-        <div style={styles.rightPanel}>
-            <div style={styles.formContainer}>
+        <div className="login-right-panel" style={styles.rightPanel}>
+            <div className="login-form-container" style={styles.formContainer}>
                 <h2 style={styles.formTitle}>Welcome!</h2>
                 <p style={styles.formSubtitle}>Sign in to your ClassSync account</p>
 
@@ -174,7 +174,8 @@ const styles = {
 
     // Right panel
     rightPanel: {
-        width: '480px',
+        width: '100%',
+        maxWidth: '576px',
         flexShrink: 0,
         backgroundColor: 'white',
         display: 'flex',

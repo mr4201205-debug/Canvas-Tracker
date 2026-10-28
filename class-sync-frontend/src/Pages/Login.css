@@ -1,0 +1,30 @@
+.login-page {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    flex-direction: column;
+  }
+
+  .login-left-panel {
+    display: none !important;
+  }
+
+  .login-right-panel {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 100vh;
+    min-height: 100dvh;
+    box-sizing: border-box;
+    padding: 32px 24px !important;
+  }
+
+  .login-form-container {
+    width: 100%;
+    max-width: 420px;
+    margin: auto;
+  }
+}
