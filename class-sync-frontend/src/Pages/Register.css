@@ -10,15 +10,28 @@
   }
 
   .register-left-panel {
-    display: none !important;
+    display: flex !important;
+    flex: none;
+    width: 100%;
+    min-height: auto;
+    box-sizing: border-box;
+    padding: 28px 24px !important;
+    justify-content: flex-start;
+  }
+
+  .register-left-panel h1 {
+    font-size: 30px !important;
+  }
+
+  .register-left-panel p {
+    margin-bottom: 16px !important;
   }
 
   .register-right-panel {
     flex: 1 1 auto !important;
     width: 100% !important;
     max-width: none !important;
-    min-height: 100vh;
-    min-height: 100dvh;
+    min-height: auto;
     box-sizing: border-box;
     padding: 32px 24px !important;
   }
