@@ -124,8 +124,8 @@ const styles = {
     page: {
         display: 'flex',
         minHeight: '100vh',
+        minHeight: '100dvh',
         fontFamily: "'Segoe UI', system-ui, sans-serif",
-        flexWrap: 'wrap',
     },
 
     // Left panel
@@ -174,9 +174,8 @@ const styles = {
 
     // Right panel
     rightPanel: {
-        width: '100%',
-        maxWidth: '576px',
-        flexShrink: 0,
+        flex: '0 0 480px',
+        boxSizing: 'border-box',
         backgroundColor: 'white',
         display: 'flex',
         alignItems: 'center',

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Register.css';
 import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '../Services/api';
 
@@ -34,9 +35,9 @@ function Register() {
     };
 
     return (
-    <div style={styles.page}>
+    <div className="register-page" style={styles.page}>
         {/* Left Panel */}
-        <div style={styles.leftPanel}>
+        <div className="register-left-panel" style={styles.leftPanel}>
             <div style={styles.leftContent}>
                 <h1 style={styles.brandName}>ClassSync</h1>
                 <p style={styles.brandTagline}>Never miss a deadline again.</p>
@@ -62,8 +63,8 @@ function Register() {
         </div>
 
         {/* Right Panel */}
-        <div style={styles.rightPanel}>
-            <div style={styles.formContainer}>
+        <div className="register-right-panel" style={styles.rightPanel}>
+            <div className="register-form-container" style={styles.formContainer}>
                 <h2 style={styles.formTitle}>Create your account</h2>
                 <p style={styles.formSubtitle}>
                     Get started with ClassSync
@@ -183,9 +184,10 @@ function Register() {
 const styles = {
 
     page: {
-display: 'flex',
-minHeight: '100vh',
-fontFamily: "'Segoe UI', system-ui, sans-serif",
+ display: 'flex',
+    minHeight: '100vh',
+    minHeight: '100dvh',
+    fontFamily: "'Segoe UI', system-ui, sans-serif",
 },
 
 // Left panel
@@ -229,8 +231,8 @@ featureItem: {
 
 // Right panel
 rightPanel: {
-    width: '480px',
-    flexShrink: 0,
+    flex: '0 0 480px',
+    boxSizing: 'border-box',
     backgroundColor: 'white',
     display: 'flex',
     alignItems: 'center',
