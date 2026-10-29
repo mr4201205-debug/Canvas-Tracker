@@ -179,9 +179,14 @@ function Dashboard() {
                                     </div>
 
                                     <div style={styles.assignmentRight}>
-                                        <p style={{ ...styles.timeLeft, color: '#e63946' }}>
-                                            Overdue
-                                        </p>
+                                        <div style={{ ...styles.timeLeft, color: '#e63946' }}>
+                                            <button
+                                            style={styles.submitButton}
+                                            onClick={() => handleMarkSubmitted(assignment.id)}
+                                            >
+                                             Overdue. Mark as Submitted?
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
