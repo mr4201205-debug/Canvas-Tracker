@@ -181,7 +181,7 @@ function Dashboard() {
                                     <div style={styles.assignmentRight}>
                                         <div style={{ ...styles.timeLeft, color: '#e63946' }}>
                                             <button
-                                            style={styles.submitButton}
+                                            style={{...styles.submitButton, backgroundColor: '#e63946'}}
                                             onClick={() => handleMarkSubmitted(assignment.id)}
                                             >
                                              Overdue. Mark as Submitted?
