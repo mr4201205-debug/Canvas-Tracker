@@ -51,15 +51,22 @@ public class CanvasSyncService {
                 return;
             }
 
+            try{
             String coursesJson = canvasApiService.getCourses(user.getCanvasBaseUrl(), token);
-            try {
+
 
                 if (coursesJson == null ||
                         coursesJson.contains("\"status\":\"unauthenticated\"") ||
                         coursesJson.contains("Invalid access token") ||
                         coursesJson.contains("\"errors\"")) {
                     logger.warn("Canvas token invalid or expired for user {}", userId);
-                    emailService.sendTokenExpiredEmail(user.getEmail(), user.getName(), canvasUrl);
+
+                    LocalDateTime last = user.getTokenExpiredNotifiedAt();
+                    if (last == null || last.isBefore(LocalDateTime.now().minusDays(3))) {
+                        emailService.sendTokenExpiredEmail(user.getEmail(), user.getName(), canvasUrl);
+                        user.setTokenExpiredNotifiedAt(LocalDateTime.now());
+                        userRepository.save(user);
+                    }
                     return;
                 }
                 JsonNode courses = objectMapper.readTree(coursesJson);
@@ -131,8 +138,12 @@ public class CanvasSyncService {
             catch (org.springframework.web.reactive.function.client.WebClientResponseException e) {
                 if (e.getStatusCode().value() == 401) {
                     logger.warn("Canvas token expired for user {} - sending notification email", userId);
-                    emailService.sendTokenExpiredEmail(user.getEmail(), user.getName(), canvasUrl);
-                } else {
+                    LocalDateTime last = user.getTokenExpiredNotifiedAt();
+                    if (last == null || last.isBefore(LocalDateTime.now().minusDays(3))) {
+                        emailService.sendTokenExpiredEmail(user.getEmail(), user.getName(), canvasUrl);
+                        user.setTokenExpiredNotifiedAt(LocalDateTime.now());
+                        userRepository.save(user);
+                    }                } else {
                     logger.error("Canvas API error for user {}: {} {}", userId, e.getStatusCode(), e.getMessage());
                 }
             }catch (JsonProcessingException e) {
