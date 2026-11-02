@@ -23,7 +23,8 @@ public class User {
     private String password;
     private String canvasBaseUrl;
     private String passwordResetToken;
-    private java.time.LocalDateTime passwordResetExpiry;
+    private LocalDateTime passwordResetExpiry;
+    private LocalDateTime tokenExpiredNotifiedAt;
 
 
     @Column(name = "is_verified")
@@ -42,6 +43,7 @@ public class User {
     public String getPassword(){return password;}
     public String getPasswordResetToken(){return passwordResetToken;}
     public LocalDateTime getPasswordResetExpiry() {return passwordResetExpiry;}
+    public LocalDateTime getTokenExpiredNotifiedAt() { return tokenExpiredNotifiedAt; }
 
     public void setId(Long id) { this.id = id; }
     public void setName(String name) { this.name = name; }
@@ -53,4 +55,5 @@ public class User {
     public void setVerificationToken(String verificationToken) { this.verificationToken = verificationToken; }
     public void setPasswordResetToken (String passwordResetToken) {this.passwordResetToken = passwordResetToken;}
     public void setPasswordResetExpiry ( LocalDateTime passwordResetExpiry) {this.passwordResetExpiry = passwordResetExpiry;}
+    public void setTokenExpiredNotifiedAt(LocalDateTime tokenExpiredNotifiedAt) { this.tokenExpiredNotifiedAt = tokenExpiredNotifiedAt; }
 }
