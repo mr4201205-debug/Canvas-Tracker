@@ -44,7 +44,13 @@ export const userService = {
     getPreferences: () => api.get('/users/me/preferences'),
     updatePreferences: (notify72Hours, notify24Hours, notify4Hours) =>
         api.put('/users/me/preferences', { notify72Hours, notify24Hours, notify4Hours }),
+
+    deleteAccount: (password) =>
+    api.delete('/users/me', { data: { password } })
+    
 };
+
+console.log('API.JS LOADED:', userService);
 
 
 

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { userService } from '../Services/api';
 
+
+
 function Settings() {
     const [user, setUser] = useState(null);
     const [name, setName] = useState('');
@@ -13,6 +15,10 @@ function Settings() {
     const [canvasToken, setCanvasToken] = useState('');
     const [profileMessage, setProfileMessage] = useState('');
     const [passwordMessage, setPasswordMessage] = useState('');
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [deletePassword, setDeletePassword] = useState('');
+    const [deleteMessage, setDeleteMessage] = useState('');
     const [notify72, setNotify72] = useState(true);
     const [notify24, setNotify24] = useState(true);
     const [notify4, setNotify4] = useState(true);
@@ -85,6 +91,30 @@ function Settings() {
     const handleLogout = () => {
         localStorage.removeItem('token');
         navigate('/login');
+    };
+    
+    const handleDeleteAccount = async () => {
+
+    if (!deletePassword) {
+        setDeleteMessage('Please enter your password to confirm.');
+        return;
+    }
+
+    setIsDeleting(true);
+
+    try {
+    await userService.deleteAccount(deletePassword);    
+    setDeleteMessage('Account deleted successfully. Redirecting to login...');
+
+        localStorage.removeItem('token');
+    setTimeout(() => {
+        navigate('/login');
+    }, 1000);   
+
+    } catch (err) {
+        setIsDeleting(false);
+        setDeleteMessage('Could not delete account. Check your password and try again.');
+    }
     };
 
     return (
@@ -322,10 +352,53 @@ function Settings() {
                             Change Password
                         </button>
                     </div>
+
+                    <div style={{ marginTop: '32px', paddingTop: '24px', borderTop: '2px solid #e63946' }}>
+                        <h2 style={{ color: '#e63946', fontSize: '18px', margin: '0 0 8px 0' }}>Danger Zone</h2>
+                            <p style={{ color: '#666', fontSize: '13px', margin: '0 0 16px 0' }}>
+                                Permanently delete your account and all of your data.
+                            </p>
+
+                        {!showDeleteConfirm ? (
+                            <button
+                                style={{ ...styles.button, backgroundColor: '#e63946' }}
+                                onClick={() => setShowDeleteConfirm(true)}>
+                                    Delete Account
+                            </button>
+                        ) : (
+                    <div>
+                    <input
+                        style={styles.input}
+                        type="password"
+                        placeholder="Enter your password to confirm"
+                        value={deletePassword}
+                        onChange={(e) => setDeletePassword(e.target.value)}
+                    />
+                    <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
+                        <button
+                            style={{ ...styles.button, backgroundColor: '#e63946' }}
+                            onClick={handleDeleteAccount}
+                            disabled={isDeleting}
+                        >
+                            {isDeleting ? 'Deleting...' : 'Permanently Delete'}
+                        </button>
+                        <button
+                            style={{ ...styles.button, backgroundColor: '#ccc', color: '#333' }}
+                            onClick={() => { setShowDeleteConfirm(false); setDeletePassword(''); setDeleteMessage(''); }}>
+                            Cancel
+                        </button>
+                    </div>
                 </div>
+                )}
+
+            {deleteMessage && (
+                <p style={{ color: '#0d7824', fontSize: '13px', marginTop: '12px' }}>{deleteMessage}</p>
+                )}
             </div>
         </div>
-    );
+    </div>
+</div>
+);
 }
 
 const styles = {
