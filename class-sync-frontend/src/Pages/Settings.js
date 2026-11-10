@@ -179,7 +179,7 @@ function Settings() {
                             <label style={styles.label}>Canvas API Token</label>
                             <input
                                 style={styles.input}
-                                type="password"
+                                type="text"
                                 placeholder="Paste new token here to update"
                                 value={canvasToken}
                                 onChange={(e) => setCanvasToken(e.target.value)}
