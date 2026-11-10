@@ -134,6 +134,24 @@ public class UserController {
         }).orElse(ResponseEntity.badRequest().body("User not found"));
     }
 
+    @DeleteMapping("/me")
+    public ResponseEntity<String> deleteAccount(
+            @RequestBody java.util.Map<String, String> request,
+            org.springframework.security.core.Authentication authentication) {
+
+        String password = request.get("password");
+        String email = authentication.getName();
+
+        return userRepository.findByEmail(email).map(user -> {
+            if (password == null || !passwordEncoder.matches(password, user.getPassword())) {
+                return ResponseEntity.badRequest().body("Incorrect password");
+            }
+            userService.deleteAccount(user);
+            return ResponseEntity.ok("Account deleted successfully");
+        }).orElse(ResponseEntity.badRequest().body("User not found"));
+    }
+
+
 
 
 }
