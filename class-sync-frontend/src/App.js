@@ -12,6 +12,9 @@ import Verify from './Pages/Verify';
 import ResetPassword  from './Pages/ResetPassword.js';
 import { ForgotPassword } from './Pages/ForgotPassword.js';
 
+import PrivacyPolicy from './Pages/PrivacyPolicy';
+
+
 
 
 function App() {
@@ -28,6 +31,7 @@ function App() {
                 <Route path="/verify" element={<Verify />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="*" element={<Navigate to="/login" />} />
 
             </Routes>
