@@ -111,6 +111,11 @@ function Login() {
                     <Link to="/register" style={styles.link}>Create one!</Link>
                 </p>
 
+                <p style={styles.privacyText}>
+                    By logging in, you agree to our{' '}
+                    <Link to="/privacy" style={styles.link}>Privacy Policy</Link>.
+                </p>
+
                 
             </div>
         </div>
@@ -263,6 +268,13 @@ const styles = {
         textDecoration: 'none',
         fontWeight: '500',
     },
+    privacyText: {
+        textAlign: 'center',
+        fontSize: '12px',
+        color: '#666', 
+        textDecoration: 'none',
+        margin: '0 0 16px 0',
+    }
 };
 
 export default Login;

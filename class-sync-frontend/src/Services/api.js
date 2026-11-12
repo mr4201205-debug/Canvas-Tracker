@@ -50,8 +50,6 @@ export const userService = {
     
 };
 
-console.log('API.JS LOADED:', userService);
-
 
 
 export const canvasService = {
