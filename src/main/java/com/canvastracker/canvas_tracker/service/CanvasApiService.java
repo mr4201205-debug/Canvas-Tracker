@@ -21,7 +21,7 @@ public class CanvasApiService{
     public String getCourses(String baseUrl, String token) {
         return buildClient(baseUrl, token)
                 .get()
-                .uri("/api/v1/courses?enrollment_state=active&per_page=50")
+                .uri("/api/v1/courses?enrollment_state=active&enrollment_type=student&per_page=50")
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
