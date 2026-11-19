@@ -13,8 +13,15 @@ function Register() {
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const urlHasSlash = canvasBaseUrl.includes('/');
 
     const handleRegister = async () => {
+
+        if (urlHasSlash) {
+            setError('Canvas URL should not contain "/". Enter just the address, like school.instructure.com');
+            return;
+        }
+
         if (!name || !email || !password || !canvasBaseUrl || !canvasToken) {
             setError('All fields are required');
             return;
@@ -117,13 +124,24 @@ function Register() {
                     <div style={styles.field}>
                         <label style={styles.label}>Canvas URL</label>
                         <input
-                            style={styles.input}
+                            style={{
+                            ...styles.input,
+                            border: urlHasSlash ? '1px solid #e63946' : '1px solid #ddd',
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            }}
                             type="text"
                             placeholder="school.instructure.com"
                             value={canvasBaseUrl}
                             onChange={(e) => setCanvasBaseUrl(e.target.value)}
                             required
                         />
+
+                        {urlHasSlash && (
+                        <p style={{ color: '#e63946', fontSize: '12px', margin: '4px 0 0 0' }}>
+                        Remove "https://" and any "/". Use just the address, like school.instructure.com
+                        </p>
+                        )}
                     </div>
 
                     <div style={styles.field}>
