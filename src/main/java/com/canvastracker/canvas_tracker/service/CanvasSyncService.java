@@ -62,10 +62,11 @@ public class CanvasSyncService {
                     logger.warn("Canvas token invalid or expired for user {}", userId);
 
                     LocalDateTime last = user.getTokenExpiredNotifiedAt();
-                    if (last == null || last.isBefore(LocalDateTime.now().minusDays(3))) {
+                    if (last == null || last.isBefore(LocalDateTime.now().minusDays(10))) {
                         emailService.sendTokenExpiredEmail(user.getEmail(), user.getName(), canvasUrl);
                         user.setTokenExpiredNotifiedAt(LocalDateTime.now());
                         userRepository.save(user);
+
                     }
                     return;
                 }
@@ -137,12 +138,13 @@ public class CanvasSyncService {
             }
             catch (org.springframework.web.reactive.function.client.WebClientResponseException e) {
                 if (e.getStatusCode().value() == 401) {
-                    logger.warn("Canvas token expired for user {} - sending notification email", userId);
                     LocalDateTime last = user.getTokenExpiredNotifiedAt();
-                    if (last == null || last.isBefore(LocalDateTime.now().minusDays(3))) {
+                    if (last == null || last.isBefore(LocalDateTime.now().minusDays(10))) {
                         emailService.sendTokenExpiredEmail(user.getEmail(), user.getName(), canvasUrl);
                         user.setTokenExpiredNotifiedAt(LocalDateTime.now());
                         userRepository.save(user);
+                        logger.warn("Canvas token expired for user {} - sending notification email", userId);
+
                     }                } else {
                     logger.error("Canvas API error for user {}: {} {}", userId, e.getStatusCode(), e.getMessage());
                 }
