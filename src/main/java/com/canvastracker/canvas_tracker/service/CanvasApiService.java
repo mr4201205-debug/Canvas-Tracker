@@ -2,6 +2,7 @@ package com.canvastracker.canvas_tracker.service;
 
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
@@ -11,9 +12,15 @@ public class CanvasApiService{
     }
 
     private WebClient buildClient(String baseUrl, String token) {
+        ExchangeStrategies strategies = ExchangeStrategies.builder()
+                .codecs(configurer -> configurer
+                        .defaultCodecs()
+                        .maxInMemorySize(16*1024*1024))
+                .build();
         return WebClient.builder()
                 .baseUrl("https://" + baseUrl)
                 .defaultHeader("Authorization", "Bearer " + token)
+                .exchangeStrategies(strategies)
                 .build();
     }
 
